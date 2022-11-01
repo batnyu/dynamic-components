@@ -1,0 +1,61 @@
+{
+  "name": "tooling-widget-scaffolder",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/tooling/widget-scaffolder/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/tooling/widget-scaffolder",
+        "main": "libs/tooling/widget-scaffolder/src/index.ts",
+        "tsConfig": "libs/tooling/widget-scaffolder/tsconfig.lib.json",
+        "assets": [
+          "libs/tooling/widget-scaffolder/*.md",
+          {
+            "input": "./libs/tooling/widget-scaffolder/src",
+            "glob": "**/!(*.ts)",
+            "output": "./src"
+          },
+          {
+            "input": "./libs/tooling/widget-scaffolder/src",
+            "glob": "**/*.d.ts",
+            "output": "./src"
+          },
+          {
+            "input": "./libs/tooling/widget-scaffolder",
+            "glob": "generators.json",
+            "output": "."
+          },
+          {
+            "input": "./libs/tooling/widget-scaffolder",
+            "glob": "executors.json",
+            "output": "."
+          }
+        ]
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": [
+          "libs/tooling/widget-scaffolder/**/*.ts",
+          "libs/tooling/widget-scaffolder/generators.json",
+          "libs/tooling/widget-scaffolder/executors.json",
+          "libs/tooling/widget-scaffolder/package.json"
+        ]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/tooling/widget-scaffolder/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

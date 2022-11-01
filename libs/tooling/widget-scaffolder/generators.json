@@ -1,0 +1,12 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "name": "tooling-widget-scaffolder",
+  "version": "0.0.1",
+  "generators": {
+    "tooling-widget-scaffolder": {
+      "factory": "./src/generators/tooling-widget-scaffolder/generator",
+      "schema": "./src/generators/tooling-widget-scaffolder/schema.json",
+      "description": "tooling-widget-scaffolder generator"
+    }
+  }
+}
