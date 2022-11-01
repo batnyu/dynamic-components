@@ -24,6 +24,10 @@ const mapWidgetKindToComponent: Record<
     import('./hero-job-ad.component').then((a) => a.HeroJobAdComponent),
   'hero-profile': () =>
     import('./hero-profile.component').then((a) => a.HeroProfileComponent),
+  text: () =>
+    import(
+      './../../../widgets/widget-text/ui/src/lib/widgets-widget-text-ui.component'
+    ).then((a) => a.WidgetsWidgetTextUiComponent),
 };
 
 @Component({

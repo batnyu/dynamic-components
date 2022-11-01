@@ -15,7 +15,13 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@test-widgets/widget-assembler": ["libs/widget-assembler/src/index.ts"]
+      "@test-widgets/widget-assembler": ["libs/widget-assembler/src/index.ts"],
+      "@test-widgets/widget-text-model": [
+        "libs/widgets/widget-text/model/src/index.ts"
+      ],
+      "@test-widgets/widget-text-ui": [
+        "libs/widgets/widget-text/ui/src/index.ts"
+      ]
     }
   },
   "exclude": ["node_modules", "tmp"]

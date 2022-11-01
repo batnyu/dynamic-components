@@ -1,3 +1,5 @@
+import { WidgetText } from '@test-widgets/widget-text-model';
+
 export type AdItem = {
   pos: Pos;
 } & Widget;
@@ -21,4 +23,5 @@ export interface HeroProfile {
 
 export type Widget =
   | { kind: 'hero-job-ad'; data: HeroJobAdInput }
-  | { kind: 'hero-profile'; data: HeroProfile };
+  | { kind: 'hero-profile'; data: HeroProfile }
+  | { kind: 'text'; data: WidgetText };

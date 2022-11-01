@@ -1,0 +1,3 @@
+npx nx generate @nrwl/angular:library ui --style=scss --directory=widgets/widget-text --buildable --changeDetection=OnPush --importPath=@test-widgets/widget-text-ui --skipTests --standalone --no-interactive --dry-run
+
+npx nx generate @nrwl/js:library model --directory=widgets/widget-text --importPath=@test-widgets/widget-text-model --no-interactive

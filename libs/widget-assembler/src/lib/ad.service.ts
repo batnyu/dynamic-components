@@ -12,10 +12,11 @@ export class AdService {
           width: 50,
           height: 50,
         },
-        kind: 'hero-profile',
+        kind: 'text',
         data: {
-          name: 'Bombasto',
-          bio: 'Brave as they come',
+          value: 'Hello bro',
+          displayCenter: true,
+          backgroundColor: 'red',
         },
       },
       {
