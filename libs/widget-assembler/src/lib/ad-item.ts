@@ -1,11 +1,4 @@
-import { Type } from '@angular/core';
-
-// export class AdItem {
-//   constructor(public component: Type<any>, public data: any) {}
-// }
-
 export type AdItem = {
-  getComponent: () => Promise<Type<any>>;
   pos: Pos;
 } & Widget;
 

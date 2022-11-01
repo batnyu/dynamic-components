@@ -6,10 +6,6 @@ export class AdService {
   getAds(): AdItem[] {
     return [
       {
-        getComponent: () =>
-          import('./hero-profile.component').then(
-            (a) => a.HeroProfileComponent
-          ),
         pos: {
           x: 0,
           y: 0,
@@ -23,10 +19,6 @@ export class AdService {
         },
       },
       {
-        getComponent: () =>
-          import('./hero-profile.component').then(
-            (a) => a.HeroProfileComponent
-          ),
         pos: {
           x: 50,
           y: 0,
@@ -40,8 +32,6 @@ export class AdService {
         },
       },
       {
-        getComponent: () =>
-          import('./hero-job-ad.component').then((a) => a.HeroJobAdComponent),
         pos: {
           x: 0,
           y: 50,
@@ -55,8 +45,6 @@ export class AdService {
         },
       },
       {
-        getComponent: () =>
-          import('./hero-job-ad.component').then((a) => a.HeroJobAdComponent),
         pos: {
           x: 50,
           y: 50,

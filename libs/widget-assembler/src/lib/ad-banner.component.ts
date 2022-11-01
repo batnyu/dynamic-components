@@ -5,18 +5,26 @@ import {
   Component,
   inject,
   Input,
-  OnDestroy,
-  OnInit,
   QueryList,
   Renderer2,
-  ViewChild,
+  Type,
   ViewChildren,
 } from '@angular/core';
 
 import { AdDirective } from './ad.directive';
-import { AdItem } from './ad-item';
+import { AdItem, Widget } from './ad-item';
 import { AdComponent } from './ad.component';
 import { NgFor } from '@angular/common';
+
+const mapWidgetKindToComponent: Record<
+  Widget['kind'],
+  () => Promise<Type<any>>
+> = {
+  'hero-job-ad': () =>
+    import('./hero-job-ad.component').then((a) => a.HeroJobAdComponent),
+  'hero-profile': () =>
+    import('./hero-profile.component').then((a) => a.HeroProfileComponent),
+};
 
 @Component({
   standalone: true,
@@ -57,10 +65,9 @@ export class AdBannerComponent implements AfterViewInit {
   async loadWidgets() {
     const components = await Promise.all(
       this.widgets.map((widget) => {
-        return widget.getComponent();
+        return mapWidgetKindToComponent[widget.kind]();
       })
     );
-    // Maybe we can't store function in json, need to do a switch here to dynamic import components
 
     this.adHosts.map((adDirective, index) => {
       const widget = this.widgets[index];
