@@ -5,7 +5,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { <%= interfaceName %> } from '<%= importPath %>';
+import type { <%= interfaceName %> } from '<%= importPath %>';
 
 @Component({
   selector: '<%= npmScope %>-<%= nameLib %>',

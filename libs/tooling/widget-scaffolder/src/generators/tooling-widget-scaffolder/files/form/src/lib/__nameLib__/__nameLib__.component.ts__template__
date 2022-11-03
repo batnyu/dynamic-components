@@ -7,10 +7,10 @@ import {
   FormsModule,
   ReactiveFormsModule,
 } from '@angular/forms';
-import { <%= interfaceName %> } from '<%= importPath %>';
+import type { <%= interfaceName %> } from '<%= importPath %>';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { ControlsOf } from '@test-widgets/shared-utils';
+import type { ControlsOf } from '@test-widgets/shared-utils';
 
 @Component({
   selector: '<%= npmScope %>-<%= nameLib %>',
