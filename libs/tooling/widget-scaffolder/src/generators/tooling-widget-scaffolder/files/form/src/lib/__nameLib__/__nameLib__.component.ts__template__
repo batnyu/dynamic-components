@@ -1,0 +1,44 @@
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  FormControl,
+  FormGroup,
+  Validators,
+  FormsModule,
+  ReactiveFormsModule,
+} from '@angular/forms';
+import { <%= interfaceName %> } from '<%= importPath %>';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { ControlsOf } from '@test-widgets/shared-utils';
+
+@Component({
+  selector: '<%= npmScope %>-<%= nameLib %>',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
+  templateUrl: './<%= nameLib %>.component.html',
+  styleUrls: ['./<%= nameLib %>.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class <%= className %> implements OnInit {
+  <%= formPropertyName %> = new FormGroup<ControlsOf<<%= interfaceName %>>>({
+    value: new FormControl('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    })
+  });
+
+  constructor() {}
+
+  ngOnInit(): void {}
+
+  onSubmit() {
+    console.log('form value', this.<%= formPropertyName %>.value);
+  }
+}

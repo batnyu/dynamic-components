@@ -15,9 +15,13 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@test-widgets/shared-utils": ["libs/shared/utils/src/index.ts"],
       "@test-widgets/widget-assembler": ["libs/widget-assembler/src/index.ts"],
       "@test-widgets/widget-scaffolder": [
         "libs/tooling/widget-scaffolder/src/index.ts"
+      ],
+      "@test-widgets/widget-text-form": [
+        "libs/widgets/widget-text/form/src/index.ts"
       ],
       "@test-widgets/widget-text-model": [
         "libs/widgets/widget-text/model/src/index.ts"

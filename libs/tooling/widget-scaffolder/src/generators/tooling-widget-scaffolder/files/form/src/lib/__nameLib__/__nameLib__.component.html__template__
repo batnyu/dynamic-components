@@ -1,0 +1,7 @@
+<form class="example-form" [formGroup]="<%= formPropertyName %>" (ngSubmit)="onSubmit()">
+  <mat-form-field appearance="fill">
+    <mat-label>Value</mat-label>
+    <input matInput placeholder="Ex. Pizza" formControlName="value" />
+  </mat-form-field>
+  <button type="submit">Submit</button>
+</form>

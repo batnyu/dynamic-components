@@ -1,5 +1,5 @@
 export interface ToolingWidgetScaffolderGeneratorSchema {
-  name: string;
+  widgetName: string;
   tags?: string;
   directory?: string;
 }

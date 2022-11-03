@@ -1,0 +1,7 @@
+<form class="example-form" [formGroup]="widgetTextForm" (ngSubmit)="onSubmit()">
+  <mat-form-field class="example-full-width" appearance="fill">
+    <mat-label>Value</mat-label>
+    <input matInput placeholder="Ex. Pizza" formControlName="value" />
+  </mat-form-field>
+  <button type="submit">Submit</button>
+</form>

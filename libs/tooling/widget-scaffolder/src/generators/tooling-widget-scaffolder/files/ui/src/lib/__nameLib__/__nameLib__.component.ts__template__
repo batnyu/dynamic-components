@@ -1,0 +1,26 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { <%= interfaceName %> } from '<%= importPath %>';
+
+@Component({
+  selector: '<%= npmScope %>-<%= nameLib %>',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './<%= nameLib %>.component.html',
+  styleUrls: ['./<%= nameLib %>.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class <%= className %> implements OnInit {
+  @Input() data: <%= interfaceName %> = {
+    value: "placeholder to change"
+  };
+
+  constructor() {}
+
+  ngOnInit(): void {}
+}

@@ -1,8 +1,8 @@
 {
-  "name": "widgets-widget-text-ui",
+  "name": "widgets-widget-text-form",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "libs/widgets/widget-text/ui/src",
+  "sourceRoot": "libs/widgets/widget-text/form/src",
   "prefix": "test-widgets",
   "targets": {
     "build": {
@@ -11,14 +11,14 @@
         "{workspaceRoot}/dist/{projectRoot}"
       ],
       "options": {
-        "project": "libs/widgets/widget-text/ui/ng-package.json"
+        "project": "libs/widgets/widget-text/form/ng-package.json"
       },
       "configurations": {
         "production": {
-          "tsConfig": "libs/widgets/widget-text/ui/tsconfig.lib.prod.json"
+          "tsConfig": "libs/widgets/widget-text/form/tsconfig.lib.prod.json"
         },
         "development": {
-          "tsConfig": "libs/widgets/widget-text/ui/tsconfig.lib.json"
+          "tsConfig": "libs/widgets/widget-text/form/tsconfig.lib.json"
         }
       },
       "defaultConfiguration": "production"
@@ -29,7 +29,7 @@
         "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "jestConfig": "libs/widgets/widget-text/ui/jest.config.ts",
+        "jestConfig": "libs/widgets/widget-text/form/jest.config.ts",
         "passWithNoTests": true
       }
     },
@@ -37,8 +37,8 @@
       "executor": "@nrwl/linter:eslint",
       "options": {
         "lintFilePatterns": [
-          "libs/widgets/widget-text/ui/**/*.ts",
-          "libs/widgets/widget-text/ui/**/*.html"
+          "libs/widgets/widget-text/form/**/*.ts",
+          "libs/widgets/widget-text/form/**/*.html"
         ]
       }
     }
