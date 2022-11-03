@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AdItem } from './ad-item';
+import { AdItem } from '@test-widgets/shared-utils';
 
 @Injectable()
 export class AdService {
@@ -26,10 +26,11 @@ export class AdService {
           width: 50,
           height: 50,
         },
-        kind: 'hero-profile',
+        kind: 'text',
         data: {
-          name: 'Dr. IQ',
-          bio: 'Smart as they come',
+          value: 'Hello bro 3 ',
+          displayCenter: true,
+          backgroundColor: 'lightgreen',
         },
       },
       {
@@ -39,10 +40,11 @@ export class AdService {
           width: 50,
           height: 50,
         },
-        kind: 'hero-job-ad',
+        kind: 'text',
         data: {
-          headline: 'Hiring for several positions',
-          body: 'Submit your resume today!',
+          value: 'Hello bro 4',
+          displayCenter: true,
+          backgroundColor: 'lightblue',
         },
       },
       {
@@ -52,10 +54,11 @@ export class AdService {
           width: 50,
           height: 50,
         },
-        kind: 'hero-job-ad',
+        kind: 'text',
         data: {
-          headline: 'Openings in all departments',
-          body: 'Apply today',
+          value: 'Hello bro 5',
+          displayCenter: true,
+          backgroundColor: 'lightgrey',
         },
       },
     ];

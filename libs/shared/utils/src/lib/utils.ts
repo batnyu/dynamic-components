@@ -1,6 +1,10 @@
 import { FormControl, FormGroup } from '@angular/forms';
 import type { WidgetText } from '@test-widgets/widget-text-model';
 
+export interface AdComponent<T> {
+  data: T;
+}
+
 export type ControlsOf<T extends Record<string, any>> = {
   [K in keyof T]: T[K] extends Record<any, any>
     ? FormGroup<ControlsOf<T[K]>>

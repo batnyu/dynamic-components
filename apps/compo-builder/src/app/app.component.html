@@ -1,3 +1,5 @@
-<test-widgets-widget-assembler></test-widgets-widget-assembler>
+<test-widgets-widget-assembler [ads]="ads"></test-widgets-widget-assembler>
 
-<test-widgets-widgets-widget-text-form></test-widgets-widgets-widget-text-form>
+<test-widgets-widgets-widget-text-form
+  (onFormChange)="onFormChange($event)"
+></test-widgets-widgets-widget-text-form>

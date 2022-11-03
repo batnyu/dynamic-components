@@ -5,25 +5,22 @@ import {
   Component,
   inject,
   Input,
+  OnChanges,
   QueryList,
   Renderer2,
+  SimpleChanges,
   Type,
   ViewChildren,
 } from '@angular/core';
 
 import { AdDirective } from './ad.directive';
-import { AdItem, Widget } from './ad-item';
-import { AdComponent } from './ad.component';
+import { AdItem, Widget, AdComponent } from '@test-widgets/shared-utils';
 import { NgFor } from '@angular/common';
 
 const mapWidgetKindToComponent: Record<
   Widget['kind'],
   () => Promise<Type<any>>
 > = {
-  'hero-job-ad': () =>
-    import('./hero-job-ad.component').then((a) => a.HeroJobAdComponent),
-  'hero-profile': () =>
-    import('./hero-profile.component').then((a) => a.HeroProfileComponent),
   text: () =>
     import(
       './../../../widgets/widget-text/ui/src/lib/widgets-widget-text-ui.component'
@@ -54,13 +51,19 @@ const mapWidgetKindToComponent: Record<
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdBannerComponent implements AfterViewInit {
+export class AdBannerComponent implements AfterViewInit, OnChanges {
   @Input() widgets: AdItem[] = [];
 
   private changeDetectorRef = inject(ChangeDetectorRef);
   private renderer = inject(Renderer2);
 
   @ViewChildren(AdDirective) adHosts!: QueryList<AdDirective>;
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes['widgets'].firstChange) {
+      this.loadWidgets();
+    }
+  }
 
   ngAfterViewInit(): void {
     this.loadWidgets();

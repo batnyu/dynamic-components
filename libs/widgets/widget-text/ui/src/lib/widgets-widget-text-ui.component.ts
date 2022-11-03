@@ -4,6 +4,7 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
+import { AdComponent } from '@test-widgets/shared-utils';
 import { WidgetText } from '@test-widgets/widget-text-model';
 
 @Component({
@@ -34,7 +35,9 @@ import { WidgetText } from '@test-widgets/widget-text-model';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WidgetsWidgetTextUiComponent implements OnInit {
+export class WidgetsWidgetTextUiComponent
+  implements AdComponent<WidgetText>, OnInit
+{
   @Input() data: WidgetText = {
     value: 'Salut',
     displayCenter: true,

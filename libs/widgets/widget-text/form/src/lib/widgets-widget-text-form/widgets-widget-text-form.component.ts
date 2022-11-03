@@ -1,4 +1,10 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormControl,
@@ -42,11 +48,14 @@ export class WidgetsWidgetTextFormComponent implements OnInit {
     }),
   });
 
+  @Output() onFormChange = new EventEmitter<WidgetText>();
+
   constructor() {}
 
   ngOnInit(): void {}
 
   onSubmit() {
-    console.log('form value', this.widgetTextForm.value);
+    const value = this.widgetTextForm.getRawValue();
+    this.onFormChange.emit(value);
   }
 }

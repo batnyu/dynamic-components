@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import type { <%= interfaceName %> } from '<%= importPath %>';
+import type { AdComponent } from '@test-widgets/shared-utils';
 
 @Component({
   selector: '<%= npmScope %>-<%= nameLib %>',
@@ -15,7 +16,7 @@ import type { <%= interfaceName %> } from '<%= importPath %>';
   styleUrls: ['./<%= nameLib %>.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class <%= className %> implements OnInit {
+export class <%= className %> implements AdComponent<<%= interfaceName %>>, OnInit {
   @Input() data: <%= interfaceName %> = {
     value: "placeholder to change"
   };
