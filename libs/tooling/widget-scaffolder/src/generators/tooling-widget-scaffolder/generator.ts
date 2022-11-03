@@ -14,7 +14,7 @@ import {
 import { ToolingWidgetScaffolderGeneratorSchema } from './schema';
 import { libraryGenerator as tsLibraryGenerator } from '@nrwl/js';
 import { libraryGenerator } from '@nrwl/angular/generators';
-import { promises as fs } from 'fs';
+import { tsquery } from '@phenomnomnominal/tsquery';
 
 interface NormalizedSchema extends ToolingWidgetScaffolderGeneratorSchema {
   projectName: string;
@@ -155,6 +155,37 @@ export default async function (
     modelImportPath,
     'form'
   );
+
+  // Add to Widget union type
+  const sourceRoot = readProjectConfiguration(tree, 'shared-utils').sourceRoot;
+  const filePath = joinPathFragments(sourceRoot, './lib/utils.ts');
+  const fileEntry = tree.read(filePath);
+  let contents = fileEntry.toString();
+  contents = `
+  import type { ${interfaceName} } from '${modelImportPath}';
+  ${contents}
+  `;
+
+  const ast = tsquery.ast(contents);
+  const nodeTypeAliasDeclaration = tsquery(
+    ast,
+    'TypeAliasDeclaration:has(TypeAliasDeclaration > Identifier[name=Widget])'
+  );
+
+  if (!nodeTypeAliasDeclaration || nodeTypeAliasDeclaration.length === 0) {
+    throw 'ERROR finding Widget discriminated union type';
+  }
+
+  const indexToInsertNewType = nodeTypeAliasDeclaration[0].getEnd() - 1;
+
+  contents = `${contents.slice(
+    0,
+    indexToInsertNewType
+  )} | {kind: '${widgetName}'; data: ${interfaceName}}${contents.slice(
+    indexToInsertNewType
+  )}`;
+
+  tree.write(filePath, contents);
 
   await formatFiles(tree);
 
