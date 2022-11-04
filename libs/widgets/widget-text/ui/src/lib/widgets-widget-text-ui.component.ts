@@ -21,6 +21,12 @@ import { WidgetText } from '@test-widgets/widget-text-model';
   `,
   styles: [
     `
+      :host {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+
       div {
         width: 100%;
         height: 100%;

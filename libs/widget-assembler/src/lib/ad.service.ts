@@ -54,11 +54,11 @@ export class AdService {
           width: 50,
           height: 50,
         },
-        kind: 'text',
+        kind: 'image',
         data: {
-          value: 'Hello bro 5',
-          displayCenter: true,
-          backgroundColor: 'lightgrey',
+          src: 'https://images.unsplash.com/photo-1667561420668-3441555cabc9?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=689&q=80',
+          objectFit: 'contain',
+          backgroundColor: 'orange',
         },
       },
     ];

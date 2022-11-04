@@ -1,0 +1,22 @@
+{
+  "name": "widgets-widget-image-model",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "tags": [],
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/widgets/widget-image/model/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/widgets/widget-image/model/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

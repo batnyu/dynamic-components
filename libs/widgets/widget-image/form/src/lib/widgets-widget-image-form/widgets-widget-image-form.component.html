@@ -1,0 +1,11 @@
+<form
+  class="example-form"
+  [formGroup]="widgetImageForm"
+  (ngSubmit)="onSubmit()"
+>
+  <mat-form-field appearance="fill">
+    <mat-label>src</mat-label>
+    <input matInput placeholder="Ex. Pizza" formControlName="src" />
+  </mat-form-field>
+  <button type="submit">Submit</button>
+</form>

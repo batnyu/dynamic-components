@@ -156,7 +156,22 @@ export default async function (
     'form'
   );
 
-  // Add to Widget union type
+  updateWidgetUnionType(tree, interfaceName, modelImportPath, widgetName);
+  updateDynamicImport(tree, interfaceName, widgetName, directoryWidgets);
+
+  await formatFiles(tree);
+
+  return () => {
+    installPackagesTask(tree);
+  };
+}
+
+function updateWidgetUnionType(
+  tree: Tree,
+  interfaceName: string,
+  modelImportPath: string,
+  widgetName: string
+) {
   const sourceRoot = readProjectConfiguration(tree, 'shared-utils').sourceRoot;
   const filePath = joinPathFragments(sourceRoot, './lib/utils.ts');
   const fileEntry = tree.read(filePath);
@@ -186,12 +201,46 @@ export default async function (
   )}`;
 
   tree.write(filePath, contents);
+}
 
-  await formatFiles(tree);
+function updateDynamicImport(
+  tree: Tree,
+  interfaceName: string,
+  widgetName: string,
+  directoryWidgets: string
+) {
+  const sourceRoot = readProjectConfiguration(
+    tree,
+    'widget-assembler'
+  ).sourceRoot;
+  const filePath = joinPathFragments(
+    sourceRoot,
+    './lib/ad-banner.component.ts'
+  );
+  const fileEntry = tree.read(filePath);
+  let contents = fileEntry.toString();
 
-  return () => {
-    installPackagesTask(tree);
-  };
+  const ast = tsquery.ast(contents);
+  const node = tsquery(
+    ast,
+    'VariableDeclaration:has(Identifier[name=mapWidgetKindToComponent])'
+  );
+
+  if (!node || node.length === 0) {
+    throw 'Error finding dynamic import map';
+  }
+
+  const indexToInsertNewType = node[0].getEnd() - 1;
+  const className = names(
+    `${directoryWidgets}${interfaceName}UiComponent`
+  ).className;
+
+  contents = `${contents.slice(0, indexToInsertNewType)} ${widgetName}: () =>
+  import(
+    './../../../${directoryWidgets}/widget-${widgetName}/ui/src/lib/${directoryWidgets}-widget-${widgetName}-ui/${directoryWidgets}-widget-${widgetName}-ui.component'
+  ).then((a) => a.${className}),${contents.slice(indexToInsertNewType)}`;
+
+  tree.write(filePath, contents);
 }
 
 async function generateAngularLibrary(

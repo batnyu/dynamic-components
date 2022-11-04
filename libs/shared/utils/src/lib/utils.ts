@@ -1,3 +1,4 @@
+import type { WidgetImage } from '@test-widgets/widget-image-model';
 import { FormControl, FormGroup } from '@angular/forms';
 import type { WidgetText } from '@test-widgets/widget-text-model';
 
@@ -22,4 +23,6 @@ interface Pos {
   height: number;
 }
 
-export type Widget = { kind: 'text'; data: WidgetText };
+export type Widget =
+  | { kind: 'text'; data: WidgetText }
+  | { kind: 'image'; data: WidgetImage };

@@ -25,6 +25,10 @@ const mapWidgetKindToComponent: Record<
     import(
       './../../../widgets/widget-text/ui/src/lib/widgets-widget-text-ui.component'
     ).then((a) => a.WidgetsWidgetTextUiComponent),
+  image: () =>
+    import(
+      './../../../widgets/widget-image/ui/src/lib/widgets-widget-image-ui/widgets-widget-image-ui.component'
+    ).then((a) => a.WidgetsWidgetImageUiComponent),
 };
 
 @Component({
