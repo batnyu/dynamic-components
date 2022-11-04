@@ -1,5 +1,11 @@
-<test-widgets-widget-assembler [ads]="ads"></test-widgets-widget-assembler>
+<test-widgets-widget-assembler
+  [widgets]="widgets"
+></test-widgets-widget-assembler>
 
-<test-widgets-widgets-widget-text-form
-  (onFormChange)="onFormChange($event)"
-></test-widgets-widgets-widget-text-form>
+<div *ngFor="let widget of widgets; let index = index">
+  <test-widgets-widgets-widget-text-form
+    *ngIf="widget | guardType: isText as text"
+    [data]="text.data"
+    (onFormChange)="onFormChange(widget.kind, $event, index)"
+  ></test-widgets-widgets-widget-text-form>
+</div>

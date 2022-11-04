@@ -196,7 +196,7 @@ function updateWidgetUnionType(
   contents = `${contents.slice(
     0,
     indexToInsertNewType
-  )} | {kind: '${widgetName}'; data: ${interfaceName}}${contents.slice(
+  )} | {kind: '${widgetName}'; data: ${interfaceName}; pos: Pos}${contents.slice(
     indexToInsertNewType
   )}`;
 

@@ -1,16 +1,16 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AdItem } from '@test-widgets/shared-utils';
-import { AdBannerComponent } from '../ad-banner.component';
+import { WidgetBannerComponent } from '../widget-banner.component';
+import type { Widget } from '@test-widgets/shared-utils';
 
 @Component({
   selector: 'test-widgets-widget-assembler',
   standalone: true,
-  imports: [CommonModule, AdBannerComponent],
+  imports: [CommonModule, WidgetBannerComponent],
   templateUrl: './widget-assembler.component.html',
   styleUrls: ['./widget-assembler.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WidgetAssemblerComponent {
-  @Input() ads: AdItem[] = [];
+  @Input() widgets: Widget[] = [];
 }

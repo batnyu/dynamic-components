@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { AdItem } from '@test-widgets/shared-utils';
-import { AdService } from '@test-widgets/widget-assembler';
-import { WidgetText } from '@test-widgets/widget-text-model';
+import { isText, isImage, Widget } from '@test-widgets/shared-utils';
+import { WidgetService } from '@test-widgets/widget-assembler';
 
 @Component({
   selector: 'test-widgets-root',
@@ -9,21 +8,24 @@ import { WidgetText } from '@test-widgets/widget-text-model';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  ads: AdItem[] = [];
+  widgets: Widget[] = [];
 
-  private adService = inject(AdService);
+  isText = isText;
+  isImage = isImage;
+
+  private adService = inject(WidgetService);
 
   ngOnInit() {
-    this.ads = this.adService.getAds();
+    this.widgets = this.adService.getWidgets();
   }
 
-  onFormChange(widgetText: WidgetText) {
-    this.ads = this.ads.map((ad) =>
-      ad.kind === 'text'
-        ? { ...ad, data: { ...ad.data, value: widgetText.value } }
-        : ad
-    );
-
-    console.log('this.ads', this.ads);
+  onFormChange(kind: Widget['kind'], data: Widget['data'], index: number) {
+    const widget = { kind, data } as Widget;
+    const ret = this.widgets.slice(0);
+    ret[index] = {
+      ...ret[index],
+      ...widget,
+    };
+    this.widgets = ret;
   }
 }

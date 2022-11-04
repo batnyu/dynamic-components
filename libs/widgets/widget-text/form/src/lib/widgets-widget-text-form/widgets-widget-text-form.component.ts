@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  Input,
   OnInit,
   Output,
 } from '@angular/core';
@@ -33,6 +34,12 @@ import { ControlsOf } from '@test-widgets/shared-utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WidgetsWidgetTextFormComponent implements OnInit {
+  @Input() data: WidgetText = {
+    value: 'Salut',
+    displayCenter: true,
+    backgroundColor: 'white',
+  };
+
   widgetTextForm = new FormGroup<ControlsOf<WidgetText>>({
     value: new FormControl('', {
       nonNullable: true,
@@ -52,7 +59,9 @@ export class WidgetsWidgetTextFormComponent implements OnInit {
 
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.widgetTextForm.setValue(this.data);
+  }
 
   onSubmit() {
     const value = this.widgetTextForm.getRawValue();

@@ -13,8 +13,8 @@ import {
   ViewChildren,
 } from '@angular/core';
 
-import { AdDirective } from './ad.directive';
-import { AdItem, Widget, AdComponent } from '@test-widgets/shared-utils';
+import { WidgetDirective } from './widget.directive';
+import { Widget, AdComponent } from '@test-widgets/shared-utils';
 import { NgFor } from '@angular/common';
 
 const mapWidgetKindToComponent: Record<
@@ -23,21 +23,21 @@ const mapWidgetKindToComponent: Record<
 > = {
   text: () =>
     import(
-      './../../../widgets/widget-text/ui/src/lib/widgets-widget-text-ui.component'
+      '../../../widgets/widget-text/ui/src/lib/widgets-widget-text-ui.component'
     ).then((a) => a.WidgetsWidgetTextUiComponent),
   image: () =>
     import(
-      './../../../widgets/widget-image/ui/src/lib/widgets-widget-image-ui/widgets-widget-image-ui.component'
+      '../../../widgets/widget-image/ui/src/lib/widgets-widget-image-ui/widgets-widget-image-ui.component'
     ).then((a) => a.WidgetsWidgetImageUiComponent),
 };
 
 @Component({
   standalone: true,
-  selector: 'app-ad-banner',
-  imports: [NgFor, AdDirective],
+  selector: 'app-widget-banner',
+  imports: [NgFor, WidgetDirective],
   template: `
     <div *ngFor="let widget of widgets">
-      <ng-template adHost></ng-template>
+      <ng-template widgetHost></ng-template>
     </div>
   `,
   styles: [
@@ -55,13 +55,13 @@ const mapWidgetKindToComponent: Record<
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AdBannerComponent implements AfterViewInit, OnChanges {
-  @Input() widgets: AdItem[] = [];
+export class WidgetBannerComponent implements AfterViewInit, OnChanges {
+  @Input() widgets: Widget[] = [];
 
   private changeDetectorRef = inject(ChangeDetectorRef);
   private renderer = inject(Renderer2);
 
-  @ViewChildren(AdDirective) adHosts!: QueryList<AdDirective>;
+  @ViewChildren(WidgetDirective) widgetHosts!: QueryList<WidgetDirective>;
 
   ngOnChanges(changes: SimpleChanges): void {
     if (!changes['widgets'].firstChange) {
@@ -80,7 +80,7 @@ export class AdBannerComponent implements AfterViewInit, OnChanges {
       })
     );
 
-    this.adHosts.map((adDirective, index) => {
+    this.widgetHosts.map((adDirective, index) => {
       const widget = this.widgets[index];
       const viewContainerRef = adDirective.viewContainerRef;
       viewContainerRef.clear();
