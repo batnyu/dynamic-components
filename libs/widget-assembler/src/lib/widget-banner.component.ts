@@ -23,11 +23,11 @@ const mapWidgetKindToComponent: Record<
 > = {
   text: () =>
     import(
-      '../../../widgets/widget-text/ui/src/lib/widgets-widget-text-ui.component'
+      './../../../widgets/widget-text/ui/src/lib/widgets-widget-text-ui.component'
     ).then((a) => a.WidgetsWidgetTextUiComponent),
   image: () =>
     import(
-      '../../../widgets/widget-image/ui/src/lib/widgets-widget-image-ui/widgets-widget-image-ui.component'
+      './../../../widgets/widget-image/ui/src/lib/widgets-widget-image-ui/widgets-widget-image-ui.component'
     ).then((a) => a.WidgetsWidgetImageUiComponent),
 };
 

@@ -1,8 +1,19 @@
 {
   "name": "widgets-widget-image-model",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "tags": [],
+  "sourceRoot": "libs/widgets/widget-image/model/src",
+  "projectType": "library",
   "targets": {
+    "build": {
+      "executor": "@nrwl/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/widgets/widget-image/model",
+        "main": "libs/widgets/widget-image/model/src/index.ts",
+        "tsConfig": "libs/widgets/widget-image/model/tsconfig.lib.json",
+        "assets": ["libs/widgets/widget-image/model/*.md"]
+      }
+    },
     "lint": {
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
@@ -18,5 +29,6 @@
         "passWithNoTests": true
       }
     }
-  }
+  },
+  "tags": []
 }

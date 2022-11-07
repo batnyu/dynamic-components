@@ -110,6 +110,8 @@ export default async function (
     directory,
     importPath: modelImportPath,
     buildable: true,
+    compiler: 'tsc',
+    config: 'project',
     strict: true,
   });
 
