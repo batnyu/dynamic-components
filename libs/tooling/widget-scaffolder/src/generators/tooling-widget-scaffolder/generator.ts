@@ -109,6 +109,8 @@ export default async function (
     name,
     directory,
     importPath: modelImportPath,
+    buildable: true,
+    strict: true,
   });
 
   const modelLibRoot = readProjectConfiguration(tree, modelNameLib).root;
@@ -215,7 +217,7 @@ function updateDynamicImport(
   ).sourceRoot;
   const filePath = joinPathFragments(
     sourceRoot,
-    './lib/ad-banner.component.ts'
+    './lib/widget-banner.component.ts'
   );
   const fileEntry = tree.read(filePath);
   let contents = fileEntry.toString();
