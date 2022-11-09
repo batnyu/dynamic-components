@@ -161,7 +161,13 @@ export default async function (
   );
 
   updateWidgetUnionType(tree, interfaceName, modelImportPath, widgetName);
-  updateDynamicImport(tree, interfaceName, widgetName, directoryWidgets);
+  updateDynamicImport(
+    tree,
+    interfaceName,
+    widgetName,
+    directoryWidgets,
+    npmScope
+  );
 
   await formatFiles(tree);
 
@@ -211,7 +217,8 @@ function updateDynamicImport(
   tree: Tree,
   interfaceName: string,
   widgetName: string,
-  directoryWidgets: string
+  directoryWidgets: string,
+  npmScope: string
 ) {
   const sourceRoot = readProjectConfiguration(
     tree,
@@ -239,9 +246,11 @@ function updateDynamicImport(
     `${directoryWidgets}${interfaceName}UiComponent`
   ).className;
 
+  const uiLibImportPath = buildImportPath(npmScope, widgetName, 'ui');
+
   contents = `${contents.slice(0, indexToInsertNewType)} ${widgetName}: () =>
   import(
-    './../../../${directoryWidgets}/widget-${widgetName}/ui/src/lib/${directoryWidgets}-widget-${widgetName}-ui/${directoryWidgets}-widget-${widgetName}-ui.component'
+    '${uiLibImportPath}'
   ).then((a) => a.${className}),${contents.slice(indexToInsertNewType)}`;
 
   tree.write(filePath, contents);

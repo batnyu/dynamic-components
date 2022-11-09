@@ -22,13 +22,13 @@ const mapWidgetKindToComponent: Record<
   () => Promise<Type<any>>
 > = {
   text: () =>
-    import(
-      './../../../widgets/widget-text/ui/src/lib/widgets-widget-text-ui.component'
-    ).then((a) => a.WidgetsWidgetTextUiComponent),
+    import('@test-widgets/widget-text-ui').then(
+      (a) => a.WidgetsWidgetTextUiComponent
+    ),
   image: () =>
-    import(
-      './../../../widgets/widget-image/ui/src/lib/widgets-widget-image-ui/widgets-widget-image-ui.component'
-    ).then((a) => a.WidgetsWidgetImageUiComponent),
+    import('@test-widgets/widget-image-ui').then(
+      (a) => a.WidgetsWidgetImageUiComponent
+    ),
 };
 
 @Component({
