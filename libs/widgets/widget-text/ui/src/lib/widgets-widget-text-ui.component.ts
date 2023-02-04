@@ -1,22 +1,32 @@
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  Directive,
+  ElementRef,
+  inject,
   Input,
   OnInit,
+  ViewChild,
 } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AdComponent } from '@test-widgets/shared-utils';
 import { WidgetText } from '@test-widgets/widget-text-model';
+
+@Directive({ selector: '[wrapper]', standalone: true })
+class WrapperDirective {}
 
 @Component({
   selector: 'test-widgets-widgets-widget-text-ui',
   standalone: true,
-  imports: [],
+  imports: [WrapperDirective],
   template: `
     <div
       [style.backgroundColor]="data.backgroundColor"
       [class.center]="data.displayCenter"
+      wrapper
     >
-      <span>{{ data.value }}</span>
+      <span [innerHtml]="html"></span>
     </div>
   `,
   styles: [
@@ -37,12 +47,16 @@ import { WidgetText } from '@test-widgets/widget-text-model';
         justify-content: center;
         align-items: center;
       }
+
+      span {
+        display: block;
+      }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WidgetsWidgetTextUiComponent
-  implements AdComponent<WidgetText>, OnInit
+  implements AdComponent<WidgetText>, OnInit, AfterViewInit
 {
   @Input() data: WidgetText = {
     value: 'Salut',
@@ -50,7 +64,73 @@ export class WidgetsWidgetTextUiComponent
     backgroundColor: 'white',
   };
 
+  @ViewChild(WrapperDirective, { read: ElementRef })
+  wrapper!: ElementRef<HTMLDivElement>;
+
+  html: SafeHtml = '';
+
+  sanitizer = inject(DomSanitizer);
+
   constructor() {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.html = this.sanitizer.bypassSecurityTrustHtml(this.data.value);
+  }
+
+  ngAfterViewInit(): void {
+    if (this.data.displayCenter) {
+      return;
+    }
+
+    const child = this.wrapper.nativeElement.firstChild as HTMLSpanElement;
+    const diffHeight =
+      this.wrapper.nativeElement.offsetHeight - child.offsetHeight;
+    const childTooBig = diffHeight < 0;
+
+    if (!childTooBig) {
+      return;
+    }
+
+    this.animate(child, diffHeight);
+  }
+
+  async animate(child: HTMLSpanElement, diffHeight: number) {
+    const start = 'translateY(0px)';
+    const end = `translateY(${diffHeight}px)`;
+    child.style.transform = start;
+
+    const scaleKeyframes = [
+      { transform: start },
+      {
+        transform: end,
+      },
+    ];
+
+    const scaleTiming: KeyframeAnimationOptions = {
+      delay: 1000,
+      duration: 2100,
+      easing: 'ease-in-out',
+    };
+
+    const childAnimation = child.animate(scaleKeyframes, scaleTiming);
+    await wrapOnFinish(childAnimation);
+    child.style.transform = end;
+    console.log('finished');
+    await wait(1000);
+    this.animate(child, diffHeight);
+  }
+}
+
+function wrapOnFinish(animation: Animation) {
+  return new Promise((resolve) => {
+    animation.onfinish = (ev: AnimationPlaybackEvent) => {
+      resolve(animation);
+    };
+  });
+}
+
+function wait(timeout: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, timeout);
+  });
 }
