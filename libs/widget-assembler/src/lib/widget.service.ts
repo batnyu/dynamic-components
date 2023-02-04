@@ -8,9 +8,9 @@ export class WidgetService {
       {
         kind: 'text',
         data: {
-          value: 'Hello bro',
+          value: '<span>Hello bro 4</span>',
           displayCenter: true,
-          backgroundColor: 'red',
+          backgroundColor: 'lightblue',
         },
         pos: {
           x: 0,
@@ -19,10 +19,12 @@ export class WidgetService {
           height: 50,
         },
       },
+
       {
         kind: 'text',
         data: {
-          value: 'Hello bro 3 ',
+          value:
+            '<span style="font-size: 50px; font-weight: bold">Hello bro 3</span>',
           displayCenter: true,
           backgroundColor: 'lightgreen',
         },
@@ -33,12 +35,14 @@ export class WidgetService {
           height: 50,
         },
       },
+
       {
         kind: 'text',
         data: {
-          value: 'Hello bro 4',
-          displayCenter: true,
-          backgroundColor: 'lightblue',
+          value:
+            '<span style="font-size: 100px;">Hello, je suis un texte beaucoup trop long et je dois scroller mais pas trop non plus frero</span>',
+          displayCenter: false,
+          backgroundColor: 'red',
         },
         pos: {
           x: 0,

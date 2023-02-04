@@ -50,6 +50,7 @@ const mapWidgetKindToComponent: Record<
 
       div {
         position: absolute;
+        overflow: hidden;
       }
     `,
   ],
@@ -71,6 +72,11 @@ export class WidgetBannerComponent implements AfterViewInit, OnChanges {
 
   ngAfterViewInit(): void {
     this.loadWidgets();
+
+    // for (let i = 0; i < this.widgets.length; i++) {
+    //   const widget = this.widgets[i];
+    //   this.createComp(widget, i);
+    // }
   }
 
   async loadWidgets() {
@@ -98,6 +104,29 @@ export class WidgetBannerComponent implements AfterViewInit, OnChanges {
 
       componentRef.instance.data = widget.data;
     });
-    this.changeDetectorRef.detectChanges();
+    this.changeDetectorRef.markForCheck();
+  }
+
+  async createComp(widget: Widget, index: number) {
+    const component = await mapWidgetKindToComponent[widget.kind]();
+    const widgetDirective = this.widgetHosts.get(index);
+    if (!widgetDirective) {
+      return;
+    }
+    const viewContainerRef = widgetDirective.viewContainerRef;
+    viewContainerRef.clear();
+    const data = widget.data;
+    const componentRef =
+      viewContainerRef.createComponent<AdComponent<typeof data>>(component);
+    const { x, y, width, height } = widget.pos;
+    const parent = componentRef.location.nativeElement.parentNode;
+
+    this.renderer.setStyle(parent, 'left', x + '%');
+    this.renderer.setStyle(parent, 'top', y + '%');
+    this.renderer.setStyle(parent, 'width', width + '%');
+    this.renderer.setStyle(parent, 'height', height + '%');
+
+    componentRef.instance.data = widget.data;
+    this.changeDetectorRef.markForCheck();
   }
 }
