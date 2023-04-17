@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { WidgetBannerComponent } from '../widget-banner.component';
-import type { Widget } from '@test-widgets/shared-utils';
+import type { Slide } from '@test-widgets/shared-utils';
 
 @Component({
   selector: 'test-widgets-widget-assembler',
@@ -12,5 +12,9 @@ import type { Widget } from '@test-widgets/shared-utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WidgetAssemblerComponent {
-  @Input() widgets: Widget[] = [];
+  @Input() slide: Slide = {
+    style: {},
+    widgets: [],
+    fontsWithSizeAndLineHeight: [],
+  };
 }

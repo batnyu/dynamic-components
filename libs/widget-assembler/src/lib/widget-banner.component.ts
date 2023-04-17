@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   inject,
   Input,
   OnChanges,
@@ -11,10 +12,11 @@ import {
   SimpleChanges,
   Type,
   ViewChildren,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import { WidgetDirective } from './widget.directive';
-import { Widget, AdComponent } from '@test-widgets/shared-utils';
+import { AdComponent, Slide, Widget } from '@test-widgets/shared-utils';
 import { NgFor } from '@angular/common';
 
 const mapWidgetKindToComponent: Record<
@@ -36,41 +38,74 @@ const mapWidgetKindToComponent: Record<
   selector: 'app-widget-banner',
   imports: [NgFor, WidgetDirective],
   template: `
-    <div *ngFor="let widget of widgets">
+    <div class="widgetHostWrapper" *ngFor="let widget of slide.widgets">
       <ng-template widgetHost></ng-template>
     </div>
   `,
   styles: [
     `
-      :host {
+      app-widget-banner {
+        width: 100%;
         height: 100%;
         display: block;
         position: relative;
       }
 
-      div {
+      div.widgetHostWrapper {
         position: absolute;
         overflow: hidden;
+      }
+
+      .lmp_smaller {
+        font-size: var(--lmp_smaller_font_size);
+        line-height: var(--lmp_smaller_line_height);
+      }
+
+      .lmp_small {
+        font-size: var(--lmp_small_font_size);
+        line-height: var(--lmp_small_line_height);
+      }
+
+      .lmp_normal {
+        font-size: var(--lmp_normal_font_size);
+        line-height: var(--lmp_normal_line_height);
+      }
+
+      .lmp_big {
+        font-size: var(--lmp_big_font_size);
+        line-height: var(--lmp_big_line_height);
+      }
+
+      .lmp_bigger {
+        font-size: var(--lmp_bigger_font_size);
+        line-height: var(--lmp_bigger_line_height);
       }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class WidgetBannerComponent implements AfterViewInit, OnChanges {
-  @Input() widgets: Widget[] = [];
+  @Input() slide: Slide = {
+    style: {},
+    widgets: [],
+    fontsWithSizeAndLineHeight: [],
+  };
 
-  private changeDetectorRef = inject(ChangeDetectorRef);
-  private renderer = inject(Renderer2);
+  private readonly changeDetectorRef = inject(ChangeDetectorRef);
+  private readonly renderer = inject(Renderer2);
+  private readonly elementRef = inject(ElementRef);
 
   @ViewChildren(WidgetDirective) widgetHosts!: QueryList<WidgetDirective>;
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (!changes['widgets'].firstChange) {
+    if (!changes['slide'].firstChange) {
       this.loadWidgets();
     }
   }
 
   ngAfterViewInit(): void {
+    this.setFontSizeAndLineHeightToCSSVariable();
     this.loadWidgets();
 
     // for (let i = 0; i < this.widgets.length; i++) {
@@ -79,15 +114,28 @@ export class WidgetBannerComponent implements AfterViewInit, OnChanges {
     // }
   }
 
+  setFontSizeAndLineHeightToCSSVariable() {
+    for (const fontWithSize of this.slide.fontsWithSizeAndLineHeight) {
+      this.elementRef.nativeElement.style.setProperty(
+        `--${fontWithSize.name}_font_size`,
+        fontWithSize.fontSize
+      );
+      this.elementRef.nativeElement.style.setProperty(
+        `--${fontWithSize.name}_line_height`,
+        fontWithSize.lineHeight
+      );
+    }
+  }
+
   async loadWidgets() {
     const components = await Promise.all(
-      this.widgets.map((widget) => {
+      this.slide.widgets.map((widget) => {
         return mapWidgetKindToComponent[widget.kind]();
       })
     );
 
     this.widgetHosts.map((adDirective, index) => {
-      const widget = this.widgets[index];
+      const widget = this.slide.widgets[index];
       const viewContainerRef = adDirective.viewContainerRef;
       viewContainerRef.clear();
       const component = components[index];
@@ -95,6 +143,7 @@ export class WidgetBannerComponent implements AfterViewInit, OnChanges {
       const componentRef =
         viewContainerRef.createComponent<AdComponent<typeof data>>(component);
       const { x, y, width, height } = widget.pos;
+      // const { left, top, width, height } = widget.style;
       const parent = componentRef.location.nativeElement.parentNode;
 
       this.renderer.setStyle(parent, 'left', x + '%');
@@ -102,7 +151,13 @@ export class WidgetBannerComponent implements AfterViewInit, OnChanges {
       this.renderer.setStyle(parent, 'width', width + '%');
       this.renderer.setStyle(parent, 'height', height + '%');
 
+      // this.renderer.setStyle(parent, 'left', left);
+      // this.renderer.setStyle(parent, 'top', top);
+      // this.renderer.setStyle(parent, 'width', width);
+      // this.renderer.setStyle(parent, 'height', height);
+
       componentRef.instance.data = widget.data;
+      // componentRef.instance.style = widget.style;
     });
     this.changeDetectorRef.markForCheck();
   }

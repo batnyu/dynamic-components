@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
-import { isText, isImage, Widget } from '@test-widgets/shared-utils';
-import { WidgetService } from '@test-widgets/widget-assembler';
+import { isText, isImage, Slide, Widget } from '@test-widgets/shared-utils';
+import { SlideService } from '@test-widgets/widget-assembler';
 
 @Component({
   selector: 'test-widgets-root',
@@ -8,24 +8,28 @@ import { WidgetService } from '@test-widgets/widget-assembler';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  widgets: Widget[] = [];
+  slide: Slide = {
+    style: {},
+    widgets: [],
+    fontsWithSizeAndLineHeight: [],
+  };
 
   isText = isText;
   isImage = isImage;
 
-  private adService = inject(WidgetService);
+  private slideService = inject(SlideService);
 
   ngOnInit() {
-    this.widgets = this.adService.getWidgets();
+    this.slide = this.slideService.getSlide();
   }
 
   onFormChange(kind: Widget['kind'], data: Widget['data'], index: number) {
     const widget = { kind, data } as Widget;
-    const ret = this.widgets.slice(0);
+    const ret = this.slide.widgets.slice(0);
     ret[index] = {
       ...ret[index],
       ...widget,
     };
-    this.widgets = ret;
+    this.slide.widgets = ret;
   }
 }

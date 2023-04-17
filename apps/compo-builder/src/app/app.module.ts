@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import {
-  WidgetService,
+  SlideService,
   WidgetAssemblerComponent,
 } from '@test-widgets/widget-assembler';
 
@@ -19,7 +19,7 @@ import { GuardTypePipe } from '@test-widgets/shared-utils';
     WidgetsWidgetTextFormComponent,
     GuardTypePipe,
   ],
-  providers: [WidgetService],
+  providers: [SlideService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
