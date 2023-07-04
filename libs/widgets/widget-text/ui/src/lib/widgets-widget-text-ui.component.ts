@@ -5,6 +5,7 @@ import {
   Directive,
   ElementRef,
   inject,
+  Injector,
   Input,
   OnInit,
   ViewChild,
@@ -12,6 +13,8 @@ import {
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AdComponent } from '@test-widgets/shared-utils';
 import { WidgetText } from '@test-widgets/widget-text-model';
+import { createCustomElement } from '@angular/elements';
+import { DynamicValueComponent } from './dynamic-value.component';
 
 @Directive({ selector: '[wrapper]', standalone: true })
 class WrapperDirective {}
@@ -71,9 +74,18 @@ export class WidgetsWidgetTextUiComponent
 
   sanitizer = inject(DomSanitizer);
 
-  constructor() {}
+  constructor(private injector: Injector) {}
 
   ngOnInit(): void {
+    // TODO: Maybe put this in service
+    const labelElement = 'dynamic-value';
+    if (!customElements.get(labelElement)) {
+      const element = createCustomElement(DynamicValueComponent, {
+        injector: this.injector,
+      });
+      customElements.define(labelElement, element);
+    }
+
     this.html = this.sanitizer.bypassSecurityTrustHtml(this.data.value);
   }
 

@@ -19,3 +19,11 @@ body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
   background-color: black;
 }
+
+editor dynamic-value {
+  cursor: pointer !important;
+  border-radius: 3px;
+  padding: 2px;
+  background-color: #aabbcc;
+  border: 1px dotted #cccccc;
+}

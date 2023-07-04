@@ -18,6 +18,7 @@ import { WidgetText } from '@test-widgets/widget-text-model';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ControlsOf } from '@test-widgets/shared-utils';
+import {FormItemTextComponent} from "../form-item-text/form-item-text.component";
 
 @Component({
   selector: 'test-widgets-widgets-widget-text-form',
@@ -28,6 +29,7 @@ import { ControlsOf } from '@test-widgets/shared-utils';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    FormItemTextComponent,
   ],
   templateUrl: './widgets-widget-text-form.component.html',
   styleUrls: ['./widgets-widget-text-form.component.scss'],

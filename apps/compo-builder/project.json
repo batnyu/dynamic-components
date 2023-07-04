@@ -19,7 +19,12 @@
         "inlineStyleLanguage": "scss",
         "assets": [
           "apps/compo-builder/src/favicon.ico",
-          "apps/compo-builder/src/assets"
+          "apps/compo-builder/src/assets",
+          {
+            "glob": "**/*",
+            "input": "node_modules/tinymce",
+            "output": "/tinymce/"
+          }
         ],
         "styles": [
           "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",

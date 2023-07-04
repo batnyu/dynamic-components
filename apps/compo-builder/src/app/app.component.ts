@@ -30,6 +30,7 @@ export class AppComponent {
       ...ret[index],
       ...widget,
     };
-    this.slide.widgets = ret;
+
+    this.slide = { ...this.slide, widgets: ret };
   }
 }

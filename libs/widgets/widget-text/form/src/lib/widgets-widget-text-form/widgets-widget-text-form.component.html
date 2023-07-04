@@ -1,7 +1,13 @@
 <form class="example-form" [formGroup]="widgetTextForm" (ngSubmit)="onSubmit()">
-  <mat-form-field class="example-full-width" appearance="fill">
-    <mat-label>Value</mat-label>
-    <input matInput placeholder="Ex. Pizza" formControlName="value" />
-  </mat-form-field>
+  <!--  <mat-form-field class="example-full-width" appearance="fill">-->
+  <!--    <mat-label>Value</mat-label>-->
+  <!--    <input matInput placeholder="Ex. Pizza" formControlName="value" />-->
+  <!--  </mat-form-field>-->
+
+  <lumiplan-form-item-text
+    formControlName="value"
+    backgroundColor="#000000"
+  ></lumiplan-form-item-text>
+
   <button type="submit">Submit</button>
 </form>

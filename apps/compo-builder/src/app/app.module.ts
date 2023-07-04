@@ -9,6 +9,7 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { WidgetsWidgetTextFormComponent } from '@test-widgets/widget-text-form';
 import { GuardTypePipe } from '@test-widgets/shared-utils';
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [AppComponent],
@@ -18,6 +19,7 @@ import { GuardTypePipe } from '@test-widgets/shared-utils';
     WidgetAssemblerComponent,
     WidgetsWidgetTextFormComponent,
     GuardTypePipe,
+    MatDialogModule,
   ],
   providers: [SlideService],
   bootstrap: [AppComponent],

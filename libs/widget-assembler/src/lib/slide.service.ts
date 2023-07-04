@@ -38,7 +38,7 @@ export class SlideService {
           kind: 'text',
           data: {
             value:
-              '<div style="color: #ffffff; width: 100%;"><p style="font-family: Arial,serif; text-align: center;"><span class="lmp_normal">&#8205;salut</span></p></div>',
+              '<div style="color: #ffffff; width: 100%;"><p style="font-family: Arial,serif; text-align: center;"><span class="lmp_normal">&#8205;salut <dynamic-value class="mceNonEditable" contenteditable="false" config=\'{"type": "poi","id": 42}\'>POI name</dynamic-value></span></p></div>',
             displayCenter: true,
             backgroundColor: 'lightblue',
           },
@@ -81,7 +81,7 @@ export class SlideService {
           kind: 'text',
           data: {
             value:
-              '<span style="font-size: 100px;">Hello, je suis un texte beaucoup trop long et je dois scroller mais pas trop non plus</span>',
+              '<span style="font-size: 40px;">Hello, je suis un texte beaucoup trop long et je dois scroller mais pas trop non plus</span>',
             displayCenter: false,
             backgroundColor: 'red',
           },
