@@ -4,7 +4,10 @@ export interface WidgetText {
   backgroundColor: string;
 }
 
-export type DynamicValueConfig = {
-  type: 'poi';
-  id: number;
-};
+export type DynamicValueConfig =
+  | {
+      kind: 'poi';
+      id: number;
+    }
+  | { kind: 'unset' }
+  | { kind: 'skier'; id: number };

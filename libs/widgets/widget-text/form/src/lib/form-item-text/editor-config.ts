@@ -17,28 +17,10 @@ export function init_instance_callback(editor: Editor) {
       clearText(editor);
     }
   });
+
   //Key up
   editor.on('keyup', function (event) {
     if ((event.ctrlKey && event.key === 'A') || event.key === ' ') return;
-    // Save caret position
-    const bm = editor.selection.getBookmark();
-    event.preventDefault();
-    if (event.key === 'Enter') {
-      if (event.shiftKey) {
-        // shift + enter : disable feature
-        event.target.innerHTML = event.target.innerHTML.replace('<br>', '');
-      } else {
-        // enter : replace br per space
-        event.target.innerHTML = event.target.innerHTML.replace(
-          '<br data-mce-bogus="1">',
-          '&#8205;'
-        );
-      }
-    }
-    clearText(editor);
-
-    // Update caret position
-    editor.selection.moveToBookmark(bm);
 
     //Remove all content (backspace, delete, cut content)
     if (
@@ -118,17 +100,27 @@ export class EditorConfig {
     ],
     paste_as_text: true,
     forced_root_block: true,
-    // init_instance_callback: init_instance_callback,
+    init_instance_callback: init_instance_callback, // TODO: need to see if problem to have elem in tiny registering as custom elements, if yes, map to another
     extended_valid_elements: 'dynamic-value[*]',
     custom_elements: '~dynamic-value',
     setup: function (editor: Editor) {
       editor.ui.registry.addButton('customInsertButton', {
-        text: 'My Button',
+        text: 'Dynamic variable',
         onAction: function (_) {
           editor.insertContent(
-            '<dynamic-value class="mceNonEditable">POI name</dynamic-value>'
+            '<dynamic-value class="mceNonEditable" config=\'{"kind": "unset"}\'></dynamic-value>'
           );
         },
+      });
+      // Remove shift key
+      editor.on('keydown', function (event) {
+        if (event.keyCode == 13 && event.shiftKey) {
+          console.log(event);
+          event.preventDefault();
+          event.stopPropagation();
+          return false;
+        }
+        return true;
       });
     },
   };
@@ -199,17 +191,24 @@ function removeTags(childNode: ChildNode, level: number) {
   for (let i = 0; i < childNode.childNodes.length; i++) {
     const elm = <Element>childNode.childNodes[i];
     if (elm.childNodes.length > 0) removeTags(elm, level + 1);
-
     if (
       elm.nodeName !== '#text' &&
       !(
         elm.nodeName === 'SPAN' &&
         elm.hasAttribute('data-mce-type') &&
         elm.getAttribute('data-mce-type') === 'bookmark'
-      )
+      ) &&
+      elm.nodeName !== 'DYNAMIC-VALUE' &&
+      elm.parentElement?.nodeName !== 'DYNAMIC-VALUE'
     ) {
       if (elm.innerHTML !== '') {
-        elm.innerHTML = elm.innerHTML.replace('&#8205;', '');
+        // Search for Zero-width joiner
+        const zeroWidthJoiner = '&#8205;';
+        const included = elm.innerHTML.includes(zeroWidthJoiner);
+
+        if (included) {
+          elm.innerHTML = elm.innerHTML.replace(zeroWidthJoiner, '');
+        }
       }
       if (elm.innerHTML === '') {
         elm.remove();

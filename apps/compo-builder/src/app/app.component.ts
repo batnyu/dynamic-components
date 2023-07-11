@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { isText, isImage, Slide, Widget } from '@test-widgets/shared-utils';
 import { SlideService } from '@test-widgets/widget-assembler';
 
@@ -7,7 +7,7 @@ import { SlideService } from '@test-widgets/widget-assembler';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   slide: Slide = {
     style: {},
     widgets: [],

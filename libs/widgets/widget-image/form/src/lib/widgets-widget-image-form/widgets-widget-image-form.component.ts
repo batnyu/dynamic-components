@@ -11,6 +11,7 @@ import type { WidgetImage } from '@test-widgets/widget-image-model';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import type { ControlsOf } from '@test-widgets/shared-utils';
+import {MatButtonModule} from "@angular/material/button";
 
 @Component({
   selector: 'test-widgets-widgets-widget-image-form',
@@ -21,6 +22,7 @@ import type { ControlsOf } from '@test-widgets/shared-utils';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatButtonModule,
   ],
   templateUrl: './widgets-widget-image-form.component.html',
   styleUrls: ['./widgets-widget-image-form.component.scss'],

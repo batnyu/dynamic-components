@@ -1,0 +1,36 @@
+<div class="wrapper">
+  <form (submit)="submit()">
+    <select name="kind" [(ngModel)]="model.kind">
+      <option value="">--Please choose an option--</option>
+      <option value="unset">Unset</option>
+      <option value="poi">Poi</option>
+      <option value="skier">Skieur</option>
+    </select>
+
+    <!--    <mat-form-field appearance="fill">-->
+    <!--      <mat-label>Kind</mat-label>-->
+    <!--      <mat-select [(ngModel)]="model.kind" name="kind">-->
+    <!--        <mat-option value="unset">Unset</mat-option>-->
+    <!--        <mat-option value="poi">Poi</mat-option>-->
+    <!--      </mat-select>-->
+    <!--    </mat-form-field>-->
+
+    <ng-container *ngIf="model.kind === 'poi'">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Poi id</mat-label>
+        <input
+          matInput
+          placeholder="Ex. Pizza"
+          [(ngModel)]="model.id"
+          name="id"
+          type="number"
+          required
+        />
+      </mat-form-field>
+    </ng-container>
+
+    <button type="submit" mat-button>Submit</button>
+  </form>
+
+  <button class="closeBtn" (click)="close()">Close</button>
+</div>

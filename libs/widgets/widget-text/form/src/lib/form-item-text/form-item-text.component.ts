@@ -8,8 +8,8 @@ import {
   Output,
   EventEmitter,
   forwardRef,
-  AfterViewInit,
-  ElementRef,
+  OnDestroy,
+  NgZone,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
@@ -33,7 +33,9 @@ import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 import { debounceTime } from 'rxjs/operators';
 import { EventObj } from '@tinymce/tinymce-angular/editor/Events';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatDialog } from '@angular/material/dialog';
+import { TippyInstance, TippyService } from '@ngneat/helipopper';
+import { DynamicValueChooserDialogComponent } from '../dynamic-value-chooser-dialog/dynamic-value-chooser-dialog.component';
+import { DynamicValueConfig } from '@test-widgets/widget-text-model';
 
 @UntilDestroy()
 @Component({
@@ -60,7 +62,7 @@ import { MatDialog } from '@angular/material/dialog';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormItemTextComponent
-  implements OnInit, AfterViewInit, ControlValueAccessor
+  implements OnInit, OnDestroy, ControlValueAccessor
 {
   @ViewChild(FormControlDirective, { static: true })
   formControlDirective!: FormControlDirective;
@@ -95,10 +97,13 @@ export class FormItemTextComponent
 
   @ViewChild('editor') editorComponent!: EditorComponent;
 
+  tippy: TippyInstance | null = null;
+
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private controlContainer: ControlContainer,
-    private matDialog: MatDialog
+    private tippyService: TippyService,
+    private ngZone: NgZone
   ) {}
 
   ngOnInit(): void {
@@ -116,35 +121,69 @@ export class FormItemTextComponent
         .subscribe(() => {
           this.checkEmpty();
         });
-
-      setTimeout(() => {
-        this.editorComponent?.editor?.on('click', (e) => {
-          const element = e.target as Element;
-          const tagName = element.tagName;
-          console.dir(element);
-
-          if (tagName === 'DYNAMIC-VALUE') {
-            // open modal if click on dynamic-value component
-            const config = {
-              type: 'poi',
-              id: 1,
-            };
-            const configStr = JSON.stringify(config);
-            // this.matDialog.open()
-
-            this.editorComponent.editor.dom.setAttrib(
-              element,
-              'config',
-              configStr
-            );
-          }
-        });
-      }, 1500);
     });
+  }
+
+  ngOnDestroy() {
+    // this.tippy?.destroy();
   }
 
   onInit() {
     this.loadingEditor = false;
+
+    this.editorComponent?.editor?.on('click', (e) => {
+      const element = e.target as Element;
+      const parentElement = element.parentElement;
+      if (!parentElement) {
+        return;
+      }
+
+      const tagName = parentElement?.tagName;
+
+      if (tagName === 'DYNAMIC-VALUE') {
+        this.tippy?.destroy();
+
+        // open modal if click on dynamic-value component
+        const configAttribute =
+          parentElement?.attributes.getNamedItem('config');
+
+        if (!configAttribute) {
+          return;
+        }
+
+        const config = JSON.parse(configAttribute.value);
+
+        this.ngZone.run(() => {
+          this.tippy = this.tippyService.create(
+            parentElement,
+            DynamicValueChooserDialogComponent,
+            {
+              variation: 'popper',
+              data: {
+                config,
+                fnToUpdate: (newConfig: DynamicValueConfig) => {
+                  this.editorComponent?.editor?.dom.setAttrib(
+                    parentElement,
+                    'config',
+                    JSON.stringify(newConfig)
+                  );
+
+                  this.control.setValue(
+                    this.editorComponent?.editor?.getContent()
+                  );
+                  this.tippy?.hide();
+                },
+              },
+              appendTo: (ref) => {
+                return (ref.closest('editor') as HTMLElement) ?? undefined;
+              },
+              zIndex: 200,
+              showOnCreate: true,
+            }
+          );
+        });
+      }
+    });
   }
 
   writeValue(obj: any): void {
@@ -187,6 +226,4 @@ export class FormItemTextComponent
       }
     }
   }
-
-  ngAfterViewInit(): void {}
 }

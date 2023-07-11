@@ -1,9 +1,15 @@
 <test-widgets-widget-assembler [slide]="slide"></test-widgets-widget-assembler>
 
-<div *ngFor="let widget of slide.widgets; let index = index">
-  <test-widgets-widgets-widget-text-form
-    *ngIf="widget | guardType: isText as text"
-    [data]="text.data"
-    (onFormChange)="onFormChange(widget.kind, $event, index)"
-  ></test-widgets-widgets-widget-text-form>
-</div>
+<!--<div *ngFor="let widget of slide.widgets; let index = index">-->
+<!--  <test-widgets-widgets-widget-text-form-->
+<!--    *ngIf="widget | guardType: isText as text"-->
+<!--    [data]="text.data"-->
+<!--    (onFormChange)="onFormChange(widget.kind, $event, index)"-->
+<!--  ></test-widgets-widgets-widget-text-form>-->
+<!--</div>-->
+
+<test-widgets-widgets-widget-text-form
+  *ngIf="slide.widgets[0] | guardType: isText as text"
+  [data]="text.data"
+  (onFormChange)="onFormChange(slide.widgets[0].kind, $event, 0)"
+></test-widgets-widgets-widget-text-form>

@@ -38,7 +38,7 @@ export class SlideService {
           kind: 'text',
           data: {
             value:
-              '<div style="color: #ffffff; width: 100%;"><p style="font-family: Arial,serif; text-align: center;"><span class="lmp_normal">&#8205;salut <dynamic-value class="mceNonEditable" contenteditable="false" config=\'{"type": "poi","id": 42}\'>POI name</dynamic-value></span></p></div>',
+              '<div style="color: #ffffff; width: 100%;"><p style="font-family: Arial,serif; text-align: center;"><span class="lmp_normal">&#8205;salut <dynamic-value class="mceNonEditable" contenteditable="false" config=\'{"kind": "poi","id": 42}\'>POI name</dynamic-value></span></p></div>',
             displayCenter: true,
             backgroundColor: 'lightblue',
           },

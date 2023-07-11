@@ -18,7 +18,8 @@ import { WidgetText } from '@test-widgets/widget-text-model';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ControlsOf } from '@test-widgets/shared-utils';
-import {FormItemTextComponent} from "../form-item-text/form-item-text.component";
+import { FormItemTextComponent } from '../form-item-text/form-item-text.component';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'test-widgets-widgets-widget-text-form',
@@ -30,6 +31,7 @@ import {FormItemTextComponent} from "../form-item-text/form-item-text.component"
     MatFormFieldModule,
     MatInputModule,
     FormItemTextComponent,
+    MatButtonModule,
   ],
   templateUrl: './widgets-widget-text-form.component.html',
   styleUrls: ['./widgets-widget-text-form.component.scss'],
@@ -63,6 +65,11 @@ export class WidgetsWidgetTextFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.widgetTextForm.setValue(this.data);
+
+    // this.widgetTextForm.valueChanges.subscribe((value) => {
+    //   console.log('value', value);
+    //   this.onSubmit();
+    // });
   }
 
   onSubmit() {
