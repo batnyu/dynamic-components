@@ -22,6 +22,8 @@ export function init_instance_callback(editor: Editor) {
   editor.on('keyup', function (event) {
     if ((event.ctrlKey && event.key === 'A') || event.key === ' ') return;
 
+    // clearText() has been removed, maybe it's useful
+
     //Remove all content (backspace, delete, cut content)
     if (
       (event.key === 'Backspace' ||
@@ -107,8 +109,9 @@ export class EditorConfig {
       editor.ui.registry.addButton('customInsertButton', {
         text: 'Dynamic variable',
         onAction: function (_) {
+          const token = crypto.randomUUID();
           editor.insertContent(
-            '<dynamic-value class="mceNonEditable" config=\'{"kind": "unset"}\'></dynamic-value>'
+            `<dynamic-value class="mceNonEditable" dynamic-value-id="${token}" config='{"kind": "unset"}'></dynamic-value>`
           );
         },
       });

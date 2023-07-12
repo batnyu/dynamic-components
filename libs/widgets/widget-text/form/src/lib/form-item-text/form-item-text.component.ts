@@ -179,6 +179,18 @@ export class FormItemTextComponent
               },
               zIndex: 200,
               showOnCreate: true,
+              hideOnClick: 'toggle',
+              onClickOutside: (instance: any, event: Event) => {
+                const element = event.target as HTMLElement;
+                const includesMatOptionText =
+                  element.className.includes('mat-option-text');
+                const includesCdkOverlayBackdrop = element.className.includes(
+                  'cdk-overlay-backdrop'
+                );
+                if (!includesMatOptionText && !includesCdkOverlayBackdrop) {
+                  this.tippy?.hide();
+                }
+              },
             }
           );
         });

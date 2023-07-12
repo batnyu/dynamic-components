@@ -1,19 +1,13 @@
 <div class="wrapper">
   <form (submit)="submit()">
-    <select name="kind" [(ngModel)]="model.kind">
-      <option value="">--Please choose an option--</option>
-      <option value="unset">Unset</option>
-      <option value="poi">Poi</option>
-      <option value="skier">Skieur</option>
-    </select>
-
-    <!--    <mat-form-field appearance="fill">-->
-    <!--      <mat-label>Kind</mat-label>-->
-    <!--      <mat-select [(ngModel)]="model.kind" name="kind">-->
-    <!--        <mat-option value="unset">Unset</mat-option>-->
-    <!--        <mat-option value="poi">Poi</mat-option>-->
-    <!--      </mat-select>-->
-    <!--    </mat-form-field>-->
+    <mat-form-field appearance="fill">
+      <mat-label>Kind</mat-label>
+      <mat-select [(ngModel)]="model.kind" name="kind">
+        <mat-option value="unset">Unset</mat-option>
+        <mat-option value="poi">Poi</mat-option>
+        <mat-option value="skier">Skieur</mat-option>
+      </mat-select>
+    </mat-form-field>
 
     <ng-container *ngIf="model.kind === 'poi'">
       <mat-form-field class="example-full-width" appearance="fill">
@@ -27,10 +21,52 @@
           required
         />
       </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Field</mat-label>
+        <mat-select [(ngModel)]="model.field" name="field">
+          <mat-option value="associateMessage">Associate message</mat-option>
+          <mat-option value="time">Time</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <ng-container *ngIf="model.field === 'associateMessage'">
+        <mat-form-field appearance="fill">
+          <mat-label>Language</mat-label>
+          <mat-select [(ngModel)]="model.lang" name="lang">
+            <mat-option
+              *ngFor="let lang of ALL_AVAILABLE_LANGUAGES"
+              [value]="lang"
+              >{{ lang }}</mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
+      <ng-container *ngIf="model.field === 'time'">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Time group index</mat-label>
+          <input
+            matInput
+            placeholder="Ex. Pizza"
+            [(ngModel)]="model.timeGroupIndex"
+            name="timeGroupIndex"
+            type="number"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Moment</mat-label>
+          <mat-select [(ngModel)]="model.moment" name="moment">
+            <mat-option *ngFor="let moment of ALL_MOMENTS" [value]="moment">{{
+              moment
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ng-container>
     </ng-container>
 
-    <button type="submit" mat-button>Submit</button>
+    <button type="submit" mat-stroked-button>Submit</button>
   </form>
 
-  <button class="closeBtn" (click)="close()">Close</button>
+  <button mat-icon-button class="closeBtn" (click)="close()">
+    <mat-icon>close</mat-icon>
+  </button>
 </div>

@@ -6,7 +6,11 @@ import {
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DynamicValueConfig } from '@test-widgets/widget-text-model';
+import {
+  ALL_AVAILABLE_LANGUAGES,
+  ALL_MOMENTS,
+  DynamicValueConfig,
+} from '@test-widgets/widget-text-model';
 
 import { TIPPY_REF } from '@ngneat/helipopper';
 import { MatInputModule } from '@angular/material/input';
@@ -14,6 +18,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, NgForm } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'test-widgets-dynamic-value-chooser-dialog',
@@ -25,6 +30,7 @@ import { MatButtonModule } from '@angular/material/button';
     FormsModule,
     MatSelectModule,
     MatButtonModule,
+    MatIconModule,
   ],
   templateUrl: './dynamic-value-chooser-dialog.component.html',
   styleUrls: ['./dynamic-value-chooser-dialog.component.scss'],
@@ -38,6 +44,10 @@ export class DynamicValueChooserDialogComponent implements OnInit {
   model: DynamicValueConfig = {
     kind: 'unset',
   };
+
+  protected readonly ALL_AVAILABLE_LANGUAGES = ALL_AVAILABLE_LANGUAGES;
+  protected readonly ALL_MOMENTS = ALL_MOMENTS;
+
   ngOnInit(): void {
     this.model = this.tippy.data.config;
   }

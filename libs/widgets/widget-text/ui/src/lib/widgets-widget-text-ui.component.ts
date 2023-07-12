@@ -1,20 +1,24 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   Directive,
   ElementRef,
   inject,
   Injector,
   Input,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { AdComponent } from '@test-widgets/shared-utils';
-import { WidgetText } from '@test-widgets/widget-text-model';
+import { DynamicValueInfo, WidgetText } from '@test-widgets/widget-text-model';
 import { createCustomElement } from '@angular/elements';
 import { DynamicValueComponent } from './dynamic-value.component';
+import { DynamicDataFetcherService } from './dynamic-data-fetcher.service';
+import { Subscription } from 'rxjs';
 
 @Directive({ selector: '[wrapper]', standalone: true })
 class WrapperDirective {}
@@ -29,7 +33,10 @@ class WrapperDirective {}
       [class.center]="data.displayCenter"
       wrapper
     >
-      <span [innerHtml]="html"></span>
+      <span
+        [style.visibility]="okToShow ? 'visible' : 'hidden'"
+        [innerHtml]="html"
+      ></span>
     </div>
   `,
   styles: [
@@ -59,7 +66,7 @@ class WrapperDirective {}
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WidgetsWidgetTextUiComponent
-  implements AdComponent<WidgetText>, OnInit, AfterViewInit
+  implements AdComponent<WidgetText>, OnInit, OnDestroy, AfterViewInit
 {
   @Input() data: WidgetText = {
     value: 'Salut',
@@ -74,10 +81,30 @@ export class WidgetsWidgetTextUiComponent
 
   sanitizer = inject(DomSanitizer);
 
+  dynamicDataFetcher = inject(DynamicDataFetcherService);
+  changeDetectorRef = inject(ChangeDetectorRef);
+
+  okToShow = false;
+
+  dynamicValueInfoSubscription: Subscription | null = null;
+
   constructor(private injector: Injector) {}
 
   ngOnInit(): void {
-    // TODO: Maybe put this in service
+    const curly = new RegExp('dynamic-value-id="([A-Za-z0-9-]*)', 'gi');
+    const dynamicValueIds = Array.from(
+      this.data.value.matchAll(curly),
+      (m) => m[1]
+    );
+
+    // If no dynamic-value, show immediatly content
+    if (dynamicValueIds.length === 0) {
+      this.okToShow = true;
+      this.html = this.sanitizer.bypassSecurityTrustHtml(this.data.value);
+      this.changeDetectorRef.markForCheck();
+      return;
+    }
+
     const labelElement = 'dynamic-value';
     if (!customElements.get(labelElement)) {
       const element = createCustomElement(DynamicValueComponent, {
@@ -87,6 +114,44 @@ export class WidgetsWidgetTextUiComponent
     }
 
     this.html = this.sanitizer.bypassSecurityTrustHtml(this.data.value);
+
+    const dynamicValueInfos: DynamicValueInfo[] = [];
+
+    this.dynamicValueInfoSubscription =
+      this.dynamicDataFetcher.dynamicValueInfo$.subscribe(
+        (dynamicValueInfo) => {
+          dynamicValueInfos.push(dynamicValueInfo);
+
+          const dynamicValueInfosWithoutDuplicateIds = new Set([
+            ...dynamicValueInfos.map(
+              (dynamicValueInfo) => dynamicValueInfo.dynamicValueId
+            ),
+          ]);
+
+          // If all calls are resolved
+          if (
+            dynamicValueInfosWithoutDuplicateIds.size === dynamicValueIds.length
+          ) {
+            for (const dynamicValueIdWithReady of dynamicValueInfos) {
+              if (dynamicValueIdWithReady.state === 'error') {
+                this.html = this.sanitizer.bypassSecurityTrustHtml(
+                  dynamicValueIdWithReady.message
+                );
+                this.okToShow = true;
+                this.changeDetectorRef.markForCheck();
+                return;
+              }
+            }
+
+            this.okToShow = true;
+            this.changeDetectorRef.markForCheck();
+          }
+        }
+      );
+  }
+
+  ngOnDestroy(): void {
+    this.dynamicValueInfoSubscription?.unsubscribe();
   }
 
   ngAfterViewInit(): void {

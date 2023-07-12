@@ -1,12 +1,27 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  inject,
   Input,
   OnInit,
 } from '@angular/core';
-import { DynamicValueConfig } from '@test-widgets/widget-text-model';
-import { delay, interval, map, Observable, of, scan } from 'rxjs';
+import {
+  DynamicValueConfig,
+  PoiDynamicValueConfig,
+} from '@test-widgets/widget-text-model';
+import {
+  catchError,
+  delay,
+  interval,
+  map,
+  Observable,
+  of,
+  scan,
+  tap,
+  throwError,
+} from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { DynamicDataFetcherService } from './dynamic-data-fetcher.service';
 
 @Component({
   selector: 'dynamic-value-angular',
@@ -20,13 +35,32 @@ export class DynamicValueComponent implements OnInit {
   @Input() set config(value: string) {
     if (value) {
       const dynamicValueConfig = JSON.parse(value) as DynamicValueConfig;
-      this.value = this.getValueBasedOnType(dynamicValueConfig);
+      this.value = this.getValueBasedOnType(dynamicValueConfig).pipe(
+        tap({
+          next: () => {
+            return this.dynamicDataFetcher.dynamicValueInfoSubject.next({
+              dynamicValueId: this.dynamicValueId,
+              state: 'ok',
+            });
+          },
+          error: () => {
+            return this.dynamicDataFetcher.dynamicValueInfoSubject.next({
+              dynamicValueId: this.dynamicValueId,
+              state: 'error',
+              message: `Error fetching dynamic value for type ${dynamicValueConfig.kind}`,
+            });
+          },
+        }),
+        catchError(() => of('Error'))
+      );
     }
   }
 
+  @Input() dynamicValueId = '';
+
   value!: Observable<string>;
 
-  constructor() {}
+  private dynamicDataFetcher = inject(DynamicDataFetcherService);
 
   ngOnInit(): void {
     // console.log('Init dynamic value');
@@ -34,13 +68,16 @@ export class DynamicValueComponent implements OnInit {
 
   getValueBasedOnType(dynamicValueConfig: DynamicValueConfig) {
     switch (dynamicValueConfig.kind) {
-      case 'unset':
+      case 'unset': {
         return of('unset');
-      case 'poi':
-        return of(
-          `Data from backend with type ${dynamicValueConfig.kind} and id ${dynamicValueConfig.id}`
-        ).pipe(delay(500));
-      case 'skier':
+      }
+      case 'poi': {
+        return this.getPoiValue(dynamicValueConfig);
+      }
+      case 'skier': {
+        return throwError(() => {
+          return 'Error';
+        });
         return interval(250).pipe(
           scan((acc, curr) => {
             return Math.max(0, acc + (Math.random() > 0.5 ? -1 : 1));
@@ -50,9 +87,64 @@ export class DynamicValueComponent implements OnInit {
             return a + '';
           })
         );
+      }
 
       default: {
         const _exhaustiveCheck: never = dynamicValueConfig;
+        return _exhaustiveCheck;
+      }
+    }
+  }
+
+  getPoiValue(poiDynamicValueConfig: PoiDynamicValueConfig) {
+    switch (poiDynamicValueConfig.field) {
+      case 'associateMessage': {
+        const poi = pois.find((poi) => poi.id === poiDynamicValueConfig.id);
+        if (!poi) {
+          return throwError(() => {
+            return 'Error';
+          });
+        }
+        const associateMessage = poi.associateMessages.find(
+          (associateMessage) =>
+            associateMessage.language === poiDynamicValueConfig.lang
+        );
+
+        if (!associateMessage) {
+          return throwError(() => {
+            return 'Error';
+          });
+        }
+        return of(associateMessage.data).pipe(delay(500));
+      }
+      case 'time': {
+        const poi = pois.find((poi) => poi.id === poiDynamicValueConfig.id);
+        if (!poi) {
+          return throwError(() => {
+            return 'Error';
+          });
+        }
+        const timeGroup =
+          poi.poiTimeRanges[0].timeGroups[poiDynamicValueConfig.timeGroupIndex];
+        if (!timeGroup) {
+          return throwError(() => {
+            return 'Error';
+          });
+        }
+
+        const time =
+          poiDynamicValueConfig.moment === 'begin'
+            ? timeGroup.beginTime
+            : timeGroup.endTime;
+        //   return throwError(() => {
+        //     return 'Error';
+        //   });
+
+        return of(time).pipe(delay(500));
+      }
+
+      default: {
+        const _exhaustiveCheck: never = poiDynamicValueConfig;
         return _exhaustiveCheck;
       }
     }
@@ -63,3 +155,58 @@ function randomIntFromInterval(min: number, max: number) {
   // min and max included
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
+
+export const pois = [
+  {
+    id: 42,
+    associateMessages: [
+      {
+        language: 'fr_FR',
+        data: 'Tous à la piscine',
+      },
+      {
+        language: 'en_US',
+        data: 'Everybody in the pool!',
+      },
+    ],
+    poiTimeRanges: [
+      {
+        id: 2372,
+        autoClosing: true,
+        autoOpening: true,
+        closed: false,
+        day: 1,
+        daysDifferent: false,
+        period: {
+          id: 39,
+          alternateName: null,
+          beginDate: '2021-06-10',
+          customerTreeId: 5,
+          endDate: '2035-02-05',
+          name: 'Automne',
+        },
+        used: true,
+        timeGroups: [
+          {
+            id: 91,
+            beginTime: '07:10',
+            endTime: '10:35',
+            timeGroupsIndex: 1,
+          },
+          {
+            id: 3019,
+            beginTime: '11:00',
+            endTime: '13:00',
+            timeGroupsIndex: 2,
+          },
+          {
+            id: 3020,
+            beginTime: '13:15',
+            endTime: '20:00',
+            timeGroupsIndex: 3,
+          },
+        ],
+      },
+    ],
+  },
+];
