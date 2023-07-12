@@ -1,5 +1,5 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
+import { BrowserModule, DomSanitizer } from '@angular/platform-browser';
 import {
   SlideService,
   WidgetAssemblerComponent,
@@ -15,6 +15,8 @@ import {
   popperVariation,
   provideTippyConfig,
 } from '@ngneat/helipopper';
+import { MatIconRegistry } from '@angular/material/icon';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [AppComponent],
@@ -25,6 +27,7 @@ import {
     WidgetsWidgetTextFormComponent,
     GuardTypePipe,
     MatDialogModule,
+    HttpClientModule,
   ],
   providers: [
     SlideService,
@@ -35,6 +38,28 @@ import {
         popper: popperVariation,
       },
     }),
+    {
+      provide: APP_INITIALIZER,
+      useFactory:
+        (matIconRegistry: MatIconRegistry, domSanitizer: DomSanitizer) =>
+        async () => {
+          const icons = [
+            {
+              path: 'assets/dynamic-value.svg',
+              iconName: 'dynamic-value',
+            },
+          ];
+
+          for (const icon of icons) {
+            matIconRegistry.addSvgIcon(
+              icon.iconName,
+              domSanitizer.bypassSecurityTrustResourceUrl(icon.path)
+            );
+          }
+        },
+      deps: [MatIconRegistry, DomSanitizer],
+      multi: true,
+    },
   ],
   bootstrap: [AppComponent],
 })

@@ -107,7 +107,7 @@ export class EditorConfig {
     custom_elements: '~dynamic-value',
     setup: function (editor: Editor) {
       editor.ui.registry.addButton('customInsertButton', {
-        text: 'Dynamic variable',
+        icon: 'dynamic-value',
         onAction: function (_) {
           const token = crypto.randomUUID();
           editor.insertContent(

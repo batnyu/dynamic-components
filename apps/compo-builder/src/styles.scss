@@ -27,3 +27,10 @@ editor dynamic-value {
   background-color: #aabbcc;
   border: 1px dotted #cccccc;
 }
+
+// Correct size for new icon dynamic value in toolbar of Tinymce
+// Because for obscure reasons, MatIconRegistry put width and height to 100%
+.tox-icon.tox-tbtn__icon-wrap {
+  width: 24px;
+  height: 24px;
+}

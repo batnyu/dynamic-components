@@ -12,7 +12,7 @@ import {
   NgZone,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import {
   EditorComponent,
   EditorModule,
@@ -103,7 +103,8 @@ export class FormItemTextComponent
     private changeDetectorRef: ChangeDetectorRef,
     private controlContainer: ControlContainer,
     private tippyService: TippyService,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private matIconRegistry: MatIconRegistry
   ) {}
 
   ngOnInit(): void {
@@ -130,6 +131,13 @@ export class FormItemTextComponent
 
   onInit() {
     this.loadingEditor = false;
+
+    this.matIconRegistry.getNamedSvgIcon('dynamic-value').subscribe((svg) => {
+      this.editorComponent?.editor?.ui.registry.addIcon(
+        'dynamic-value',
+        svg.outerHTML
+      );
+    });
 
     this.editorComponent?.editor?.on('click', (e) => {
       const element = e.target as Element;
@@ -182,9 +190,16 @@ export class FormItemTextComponent
               hideOnClick: 'toggle',
               onClickOutside: (instance: any, event: Event) => {
                 const element = event.target as HTMLElement;
+
+                // If clicking on svg in toolbar
+                if (typeof element.className.includes !== 'function') {
+                  this.tippy?.hide();
+                  return;
+                }
+
                 const includesMatOptionText =
-                  element.className.includes('mat-option-text');
-                const includesCdkOverlayBackdrop = element.className.includes(
+                  element.className?.includes('mat-option-text');
+                const includesCdkOverlayBackdrop = element.className?.includes(
                   'cdk-overlay-backdrop'
                 );
                 if (!includesMatOptionText && !includesCdkOverlayBackdrop) {
