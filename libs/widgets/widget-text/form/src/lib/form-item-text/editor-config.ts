@@ -108,8 +108,15 @@ export class EditorConfig {
     setup: function (editor: Editor) {
       editor.ui.registry.addButton('customInsertButton', {
         icon: 'dynamic-value',
-        onAction: function (_) {
-          const token = crypto.randomUUID();
+        tooltip: 'Dynamic value',
+        onAction: function () {
+          let token = '';
+          if (typeof crypto.randomUUID === 'function') {
+            token = crypto.randomUUID();
+          } else {
+            token = (Math.random() + 1).toString(36).substring(2);
+          }
+
           editor.insertContent(
             `<dynamic-value class="mceNonEditable" dynamic-value-id="${token}" config='{"kind": "unset"}'></dynamic-value>`
           );
