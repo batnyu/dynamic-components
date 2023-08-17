@@ -18,6 +18,7 @@ import {
 import { WidgetDirective } from './widget.directive';
 import { AdComponent, Slide, Widget } from '@test-widgets/shared-utils';
 import { NgFor } from '@angular/common';
+import { ErrorComponent } from './error.component';
 
 const mapWidgetKindToComponent: Record<
   Widget['kind'],
@@ -128,7 +129,7 @@ export class WidgetBannerComponent implements AfterViewInit, OnChanges {
   }
 
   async loadWidgets() {
-    const components = await Promise.all(
+    const components = await Promise.allSettled(
       this.slide.widgets.map((widget) => {
         return mapWidgetKindToComponent[widget.kind]();
       })
@@ -138,7 +139,15 @@ export class WidgetBannerComponent implements AfterViewInit, OnChanges {
       const widget = this.slide.widgets[index];
       const viewContainerRef = adDirective.viewContainerRef;
       viewContainerRef.clear();
-      const component = components[index];
+      const resultPromise = components[index];
+
+      let component = null;
+      if (resultPromise.status === 'fulfilled') {
+        component = resultPromise.value;
+      } else {
+        component = ErrorComponent;
+      }
+
       const data = widget.data;
       const componentRef =
         viewContainerRef.createComponent<AdComponent<typeof data>>(component);
