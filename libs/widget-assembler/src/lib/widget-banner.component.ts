@@ -25,13 +25,13 @@ const mapWidgetKindToComponent: Record<
   () => Promise<Type<any>>
 > = {
   text: () =>
-    import('@test-widgets/widget-text-ui').then(
+    import(/* webpackChunkName: "text" */ '@test-widgets/widget-text-ui').then(
       (a) => a.WidgetsWidgetTextUiComponent
     ),
   image: () =>
-    import('@test-widgets/widget-image-ui').then(
-      (a) => a.WidgetsWidgetImageUiComponent
-    ),
+    import(
+      /* webpackChunkName: "image" */ '@test-widgets/widget-image-ui'
+    ).then((a) => a.WidgetsWidgetImageUiComponent),
 };
 
 @Component({
