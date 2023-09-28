@@ -42,7 +42,7 @@ export class EditorConfig {
     menubar: false,
     inline: true,
     preview_styles: false,
-    plugins: ['emoticons', 'paste', 'contextmenu', 'noneditable'],
+    plugins: ['emoticons'],
     contextmenu: 'copy',
     language: 'en',
     emoticons_database: 'emojis',
@@ -53,7 +53,7 @@ export class EditorConfig {
       // eslint-disable-next-line max-len
       'Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Comic Sans MS=comic sans ms,sans-serif; Helvetica=helvetica; Impact=impact,chicago; Trebuchet MS=trebuchet ms,geneva;',
     toolbar:
-      'bold italic underline forecolor | fontselect | styleselect | alignleft aligncenter alignright | emoticons | customInsertButton',
+      'bold italic underline forecolor | fontfamily | styles | alignleft aligncenter alignright | emoticons | customInsertButton',
     base_url: '/tinymce',
     suffix: '.min',
     formats: {
@@ -93,6 +93,7 @@ export class EditorConfig {
         inline: 'span',
       },
     },
+    format_noneditable_selector: 'dynamic-value',
     style_formats: [
       { title: 'smaller', format: 'custom-smaller' },
       { title: 'small', format: 'custom-small' },
@@ -105,6 +106,7 @@ export class EditorConfig {
     init_instance_callback: init_instance_callback, // TODO: need to see if problem to have elem in tiny registering as custom elements, if yes, map to another
     extended_valid_elements: 'dynamic-value[*]',
     custom_elements: '~dynamic-value',
+    valid_children: '+span[dynamic-value]',
     setup: function (editor: Editor) {
       editor.ui.registry.addButton('customInsertButton', {
         icon: 'dynamic-value',
@@ -139,14 +141,14 @@ export class EditorConfig {
 function clearText(editor: Editor) {
   //Remove all br
   editor.editorManager.activeEditor
-    .getBody()
+    ?.getBody()
     .querySelectorAll('br')
     .forEach((elm) => {
       elm.parentNode?.removeChild(elm);
     });
 
   //Remove all wrong tags
-  const firstChild = editor.editorManager.activeEditor.getBody().firstChild;
+  const firstChild = editor.editorManager.activeEditor?.getBody().firstChild;
   if (firstChild) {
     removeTags(firstChild, 0);
   }

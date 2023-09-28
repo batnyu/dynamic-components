@@ -22,6 +22,7 @@ import {
 } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { DynamicDataFetcherService } from './dynamic-data-fetcher.service';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'dynamic-value-angular',
@@ -71,6 +72,11 @@ export class DynamicValueComponent implements OnInit {
       case 'unset': {
         return of('unset');
       }
+      case 'countdown': {
+        return of(
+          this.getDaysCount(dynamicValueConfig.mode, dynamicValueConfig.date)
+        );
+      }
       case 'poi': {
         return this.getPoiValue(dynamicValueConfig);
       }
@@ -94,6 +100,31 @@ export class DynamicValueComponent implements OnInit {
         return _exhaustiveCheck;
       }
     }
+  }
+
+  getDifferenceBetweenTwoDates(date1: string, date2: string): number {
+    const d1 = new Date(date1);
+    const d2 = new Date(date2);
+    const difference = d1.getTime() - d2.getTime();
+    return Math.ceil(difference / (1000 * 3600 * 24));
+  }
+
+  countIncreasing(startDate: string, today: string): number {
+    const days = this.getDifferenceBetweenTwoDates(today, startDate);
+    return days < 0 ? 0 : days;
+  }
+
+  countDecreasing(endDate: string, today: string): number {
+    const days = this.getDifferenceBetweenTwoDates(endDate, today);
+    return days < 0 ? 0 : days;
+  }
+
+  getDaysCount(mode: 'INCREASING' | 'DECREASING', date: string) {
+    const todayString = format(new Date(), 'yyyy-MM-dd');
+    const utcDate = format(new Date(date.toString()), 'yyyy-MM-dd');
+    return mode === 'INCREASING'
+      ? this.countIncreasing(utcDate, todayString) + ''
+      : this.countDecreasing(utcDate, todayString) + '';
   }
 
   getPoiValue(poiDynamicValueConfig: PoiDynamicValueConfig) {

@@ -6,8 +6,32 @@
         <mat-option value="unset">Unset</mat-option>
         <mat-option value="poi">Poi</mat-option>
         <mat-option value="skier">Skieur</mat-option>
+        <mat-option value="countdown">Countdown</mat-option>
       </mat-select>
     </mat-form-field>
+
+    <ng-container *ngIf="model.kind === 'countdown'">
+      <mat-form-field appearance="fill">
+        <mat-label>Mode</mat-label>
+        <mat-select [(ngModel)]="model.mode" name="mode">
+          <mat-option *ngFor="let mode of ALL_COUNTDOWN_MODES" [value]="mode">
+            {{ mode }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Date</mat-label>
+        <input
+          [matDatepicker]="picker"
+          matInput
+          [(ngModel)]="model.date"
+          name="date"
+        />
+        <mat-datepicker-toggle [for]="picker" matSuffix></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+    </ng-container>
 
     <ng-container *ngIf="model.kind === 'poi'">
       <mat-form-field class="example-full-width" appearance="fill">

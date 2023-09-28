@@ -7,7 +7,11 @@ export interface WidgetText {
 export type DynamicValueConfig =
   | PoiDynamicValueConfig
   | { kind: 'unset' }
-  | { kind: 'skier'; id: number };
+  | { kind: 'skier'; id: number }
+  | { kind: 'countdown'; mode: CountdownMode; date: string };
+
+export const ALL_COUNTDOWN_MODES = ['INCREASING', 'DECREASING'] as const;
+export type CountdownMode = typeof ALL_COUNTDOWN_MODES[number];
 
 export type PoiDynamicValueConfig = {
   kind: 'poi';

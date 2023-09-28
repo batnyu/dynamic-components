@@ -17,6 +17,7 @@ import {
 } from '@ngneat/helipopper';
 import { MatIconRegistry } from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [AppComponent],
@@ -28,6 +29,7 @@ import { HttpClientModule } from '@angular/common/http';
     GuardTypePipe,
     MatDialogModule,
     HttpClientModule,
+    MatNativeDateModule,
   ],
   providers: [
     SlideService,

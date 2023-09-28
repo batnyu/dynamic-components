@@ -142,18 +142,23 @@ export class FormItemTextComponent
     this.editorComponent?.editor?.on('click', (e) => {
       const element = e.target as Element;
       const parentElement = element.parentElement;
-      if (!parentElement) {
+
+      if (!parentElement || !element) {
         return;
       }
 
-      const tagName = parentElement?.tagName;
+      const parentTagName = parentElement?.tagName;
+      const tagName = element?.tagName;
 
-      if (tagName === 'DYNAMIC-VALUE') {
+      if (parentTagName === 'DYNAMIC-VALUE' || tagName === 'DYNAMIC-VALUE') {
+        const elementToTarget =
+          parentTagName === 'DYNAMIC-VALUE' ? parentElement : element;
+
         this.tippy?.destroy();
 
         // open modal if click on dynamic-value component
         const configAttribute =
-          parentElement?.attributes.getNamedItem('config');
+          elementToTarget?.attributes.getNamedItem('config');
 
         if (!configAttribute) {
           return;
@@ -163,7 +168,7 @@ export class FormItemTextComponent
 
         this.ngZone.run(() => {
           this.tippy = this.tippyService.create(
-            parentElement,
+            elementToTarget,
             DynamicValueChooserDialogComponent,
             {
               variation: 'popper',
@@ -171,7 +176,7 @@ export class FormItemTextComponent
                 config,
                 fnToUpdate: (newConfig: DynamicValueConfig) => {
                   this.editorComponent?.editor?.dom.setAttrib(
-                    parentElement,
+                    elementToTarget,
                     'config',
                     JSON.stringify(newConfig)
                   );
@@ -199,10 +204,17 @@ export class FormItemTextComponent
 
                 const includesMatOptionText =
                   element.className?.includes('mat-option-text');
+                const includesMatDatePicker =
+                  element.className?.includes('mat-calendar');
+
                 const includesCdkOverlayBackdrop = element.className?.includes(
                   'cdk-overlay-backdrop'
                 );
-                if (!includesMatOptionText && !includesCdkOverlayBackdrop) {
+                if (
+                  !includesMatOptionText &&
+                  !includesCdkOverlayBackdrop &&
+                  !includesMatDatePicker
+                ) {
                   this.tippy?.hide();
                 }
               },

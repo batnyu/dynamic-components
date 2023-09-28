@@ -8,6 +8,7 @@ import {
 import { CommonModule } from '@angular/common';
 import {
   ALL_AVAILABLE_LANGUAGES,
+  ALL_COUNTDOWN_MODES,
   ALL_MOMENTS,
   DynamicValueConfig,
 } from '@test-widgets/widget-text-model';
@@ -19,6 +20,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 
 @Component({
   selector: 'test-widgets-dynamic-value-chooser-dialog',
@@ -31,6 +33,7 @@ import { MatIconModule } from '@angular/material/icon';
     MatSelectModule,
     MatButtonModule,
     MatIconModule,
+    MatDatepickerModule,
   ],
   templateUrl: './dynamic-value-chooser-dialog.component.html',
   styleUrls: ['./dynamic-value-chooser-dialog.component.scss'],
@@ -61,4 +64,6 @@ export class DynamicValueChooserDialogComponent implements OnInit {
       this.tippy.data.fnToUpdate(this.form.value);
     }
   }
+
+  protected readonly ALL_COUNTDOWN_MODES = ALL_COUNTDOWN_MODES;
 }
