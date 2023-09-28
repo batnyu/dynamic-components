@@ -1,5 +1,10 @@
 import { Editor } from 'tinymce';
 
+interface PastePreProcessEvent {
+  content: string;
+  readonly internal: boolean;
+}
+
 export const Constants = {
   defaultTinyHTML:
     '<div style="color: #ffffff; width: 100%"><p style="font-family: Arial,serif; text-align: center;"><span class="lmp_normal">&#8205;</span></p></div>',
@@ -101,7 +106,21 @@ export class EditorConfig {
       { title: 'big', format: 'custom-big' },
       { title: 'bigger', format: 'custom-bigger' },
     ],
-    paste_as_text: true,
+    paste_as_text: false, // was important not to be able to paste image in tinymce
+    paste_preprocess: (editor: Editor, args: PastePreProcessEvent) => {
+      console.log(args.content);
+      const curly = new RegExp('dynamic-value-id="([A-Za-z0-9-]*)"', 'gi');
+      args.content = args.content.replace(curly, (match) => {
+        console.log('match', match);
+        let token = '';
+        if (typeof crypto.randomUUID === 'function') {
+          token = crypto.randomUUID();
+        } else {
+          token = (Math.random() + 1).toString(36).substring(2);
+        }
+        return `dynamic-value-id="${token}"`;
+      });
+    },
     forced_root_block: true,
     init_instance_callback: init_instance_callback, // TODO: need to see if problem to have elem in tiny registering as custom elements, if yes, map to another
     extended_valid_elements: 'dynamic-value[*]',
