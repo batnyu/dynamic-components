@@ -108,10 +108,8 @@ export class EditorConfig {
     ],
     paste_as_text: false, // was important not to be able to paste image in tinymce
     paste_preprocess: (editor: Editor, args: PastePreProcessEvent) => {
-      console.log(args.content);
       const curly = new RegExp('dynamic-value-id="([A-Za-z0-9-]*)"', 'gi');
       args.content = args.content.replace(curly, (match) => {
-        console.log('match', match);
         let token = '';
         if (typeof crypto.randomUUID === 'function') {
           token = crypto.randomUUID();
@@ -146,7 +144,6 @@ export class EditorConfig {
       // Remove shift key
       editor.on('keydown', function (event) {
         if (event.keyCode == 13 && event.shiftKey) {
-          console.log(event);
           event.preventDefault();
           event.stopPropagation();
           return false;
