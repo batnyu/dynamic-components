@@ -1,0 +1,45 @@
+/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  background-color: black;
+}
+
+editor dynamic-value {
+  cursor: pointer !important;
+  border-radius: 3px;
+  padding: 2px;
+  background-color: #aabbcc;
+  border: 1px dotted #cccccc;
+}
+
+//editor dynamic-value {
+//  cursor: pointer !important;
+//  border-radius: 6px;
+//  padding: 2px;
+//  background-color: lightgray;
+//  border: 3px solid orange;
+//  mix-blend-mode: difference;
+//}
+
+// Correct size for new icon dynamic value in toolbar of Tinymce
+// Because for obscure reasons, MatIconRegistry put width and height to 100%
+.tox-icon.tox-tbtn__icon-wrap {
+  width: 24px;
+  height: 24px;
+}

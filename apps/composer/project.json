@@ -1,26 +1,32 @@
 {
-  "name": "compo-builder",
+  "name": "composer",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "apps/compo-builder/src",
   "prefix": "test-widgets",
+  "sourceRoot": "apps/composer/src",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/compo-builder",
-        "index": "apps/compo-builder/src/index.html",
-        "main": "apps/compo-builder/src/main.ts",
-        "polyfills": "apps/compo-builder/src/polyfills.ts",
-        "tsConfig": "apps/compo-builder/tsconfig.app.json",
-        "inlineStyleLanguage": "scss",
+        "outputPath": "dist/apps/composer",
+        "index": "apps/composer/src/index.html",
+        "main": "apps/composer/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/composer/tsconfig.app.json",
         "assets": [
-          "apps/compo-builder/src/favicon.ico",
-          "apps/compo-builder/src/assets"
+          "apps/composer/src/favicon.ico",
+          "apps/composer/src/assets",
+          {
+            "glob": "**/*",
+            "input": "node_modules/tinymce",
+            "output": "/tinymce/"
+          }
         ],
         "styles": [
-          "apps/compo-builder/src/styles.scss"
+          "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+          "apps/composer/src/styles.scss"
         ],
         "scripts": []
       },
@@ -36,12 +42,6 @@
               "type": "anyComponentStyle",
               "maximumWarning": "2kb",
               "maximumError": "4kb"
-            }
-          ],
-          "fileReplacements": [
-            {
-              "replace": "apps/compo-builder/src/environments/environment.ts",
-              "with": "apps/compo-builder/src/environments/environment.prod.ts"
             }
           ],
           "outputHashing": "all"
@@ -61,10 +61,10 @@
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "browserTarget": "compo-builder:build:production"
+          "browserTarget": "composer:build:production"
         },
         "development": {
-          "browserTarget": "compo-builder:build:development"
+          "browserTarget": "composer:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -72,26 +72,35 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "compo-builder:build"
+        "browserTarget": "composer:build"
       }
     },
     "lint": {
       "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "apps/compo-builder/**/*.ts",
-          "apps/compo-builder/**/*.html"
-        ]
+        "lintFilePatterns": ["apps/composer/**/*.ts", "apps/composer/**/*.html"]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/compo-builder/jest.config.ts",
+        "jestConfig": "apps/composer/jest.config.ts",
         "passWithNoTests": true
+      },
+      "configurations": {
+        "ci": {
+          "ci": true,
+          "codeCoverage": true
+        }
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "composer:build"
       }
     }
-  },
-  "tags": []
+  }
 }

@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { isText, isImage, Slide, Widget } from '@test-widgets/shared-utils';
+import { Slide } from '@test-widgets/shared-utils';
 import { SlideService } from '@test-widgets/widget-assembler';
 
 @Component({
@@ -14,23 +14,9 @@ export class AppComponent implements OnInit {
     fontsWithSizeAndLineHeight: [],
   };
 
-  isText = isText;
-  isImage = isImage;
-
   private slideService = inject(SlideService);
 
   ngOnInit() {
     this.slide = this.slideService.getSlide();
-  }
-
-  onFormChange(kind: Widget['kind'], data: Widget['data'], index: number) {
-    const widget = { kind, data } as Widget;
-    const ret = this.slide.widgets.slice(0);
-    ret[index] = {
-      ...ret[index],
-      ...widget,
-    };
-
-    this.slide = { ...this.slide, widgets: ret };
   }
 }
