@@ -41,27 +41,27 @@ class WrapperDirective {}
   `,
   styles: [
     `
-      :host {
-        display: block;
-        width: 100%;
-        height: 100%;
-      }
-
-      div {
-        width: 100%;
-        height: 100%;
-      }
-
-      .center {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      span {
-        display: block;
-      }
-    `,
+           :host {
+             display: block;
+             width: 100%;
+             height: 100%;
+           }
+     
+           div {
+             width: 100%;
+             height: 100%;
+           }
+     
+           .center {
+             display: flex;
+             justify-content: center;
+             align-items: center;
+           }
+     
+           span {
+             display: block;
+           }
+         `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

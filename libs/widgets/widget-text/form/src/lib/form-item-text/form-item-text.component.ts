@@ -203,7 +203,9 @@ export class FormItemTextComponent
                 }
 
                 const includesMatOptionText =
-                  element.className?.includes('mat-option-text');
+                  element.className?.includes('mat-mdc-option');
+                const includesMatOptionTextInParent =
+                  element.parentElement?.className?.includes('mat-mdc-option');
                 const includesMatDatePicker =
                   element.className?.includes('mat-calendar');
 
@@ -212,6 +214,7 @@ export class FormItemTextComponent
                 );
                 if (
                   !includesMatOptionText &&
+                  !includesMatOptionTextInParent &&
                   !includesCdkOverlayBackdrop &&
                   !includesMatDatePicker
                 ) {

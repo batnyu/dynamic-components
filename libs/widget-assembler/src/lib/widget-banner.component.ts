@@ -45,43 +45,43 @@ const mapWidgetKindToComponent: Record<
   `,
   styles: [
     `
-      app-widget-banner {
-        width: 100%;
-        height: 100%;
-        display: block;
-        position: relative;
-      }
-
-      div.widgetHostWrapper {
-        position: absolute;
-        overflow: hidden;
-      }
-
-      .lmp_smaller {
-        font-size: var(--lmp_smaller_font_size);
-        line-height: var(--lmp_smaller_line_height);
-      }
-
-      .lmp_small {
-        font-size: var(--lmp_small_font_size);
-        line-height: var(--lmp_small_line_height);
-      }
-
-      .lmp_normal {
-        font-size: var(--lmp_normal_font_size);
-        line-height: var(--lmp_normal_line_height);
-      }
-
-      .lmp_big {
-        font-size: var(--lmp_big_font_size);
-        line-height: var(--lmp_big_line_height);
-      }
-
-      .lmp_bigger {
-        font-size: var(--lmp_bigger_font_size);
-        line-height: var(--lmp_bigger_line_height);
-      }
-    `,
+          app-widget-banner {
+            width: 100%;
+            height: 100%;
+            display: block;
+            position: relative;
+          }
+    
+          div.widgetHostWrapper {
+            position: absolute;
+            overflow: hidden;
+          }
+    
+          .lmp_smaller {
+            font-size: var(--lmp_smaller_font_size);
+            line-height: var(--lmp_smaller_line_height);
+          }
+    
+          .lmp_small {
+            font-size: var(--lmp_small_font_size);
+            line-height: var(--lmp_small_line_height);
+          }
+    
+          .lmp_normal {
+            font-size: var(--lmp_normal_font_size);
+            line-height: var(--lmp_normal_line_height);
+          }
+    
+          .lmp_big {
+            font-size: var(--lmp_big_font_size);
+            line-height: var(--lmp_big_line_height);
+          }
+    
+          .lmp_bigger {
+            font-size: var(--lmp_bigger_font_size);
+            line-height: var(--lmp_bigger_line_height);
+          }
+        `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
