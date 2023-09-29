@@ -5,35 +5,26 @@
   "projectType": "library",
   "targets": {
     "build": {
-      "executor": "@nrwl/js:tsc",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/libs/widgets/widget-text/model",
         "main": "libs/widgets/widget-text/model/src/index.ts",
         "tsConfig": "libs/widgets/widget-text/model/tsconfig.lib.json",
-        "assets": [
-          "libs/widgets/widget-text/model/*.md"
-        ]
+        "assets": ["libs/widgets/widget-text/model/*.md"],
+        "updateBuildableProjectDepsInPackageJson": true
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
+      "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": [
-          "libs/widgets/widget-text/model/**/*.ts"
-        ]
+        "lintFilePatterns": ["libs/widgets/widget-text/model/**/*.ts"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/{projectRoot}"
-      ],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "libs/widgets/widget-text/model/jest.config.ts",
         "passWithNoTests": true

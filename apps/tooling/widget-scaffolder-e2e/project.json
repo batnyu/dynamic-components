@@ -5,15 +5,14 @@
   "sourceRoot": "apps/tooling/widget-scaffolder-e2e/src",
   "targets": {
     "e2e": {
-      "executor": "@nrwl/nx-plugin:e2e",
+      "executor": "@nx/jest:jest",
       "options": {
-        "target": "tooling-widget-scaffolder:build",
-        "jestConfig": "apps/tooling/widget-scaffolder-e2e/jest.config.ts"
-      }
+        "jestConfig": "apps/tooling/widget-scaffolder-e2e/jest.config.ts",
+        "runInBand": true
+      },
+      "dependsOn": ["tooling-widget-scaffolder:build"]
     }
   },
   "tags": [],
-  "implicitDependencies": [
-    "tooling-widget-scaffolder"
-  ]
+  "implicitDependencies": ["tooling-widget-scaffolder"]
 }

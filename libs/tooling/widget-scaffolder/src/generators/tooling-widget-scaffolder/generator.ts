@@ -10,10 +10,10 @@ import {
   logger,
   readProjectConfiguration,
   joinPathFragments,
-} from '@nrwl/devkit';
+} from '@nx/devkit';
 import { ToolingWidgetScaffolderGeneratorSchema } from './schema';
-import { libraryGenerator as tsLibraryGenerator } from '@nrwl/js';
-import { libraryGenerator } from '@nrwl/angular/generators';
+import { libraryGenerator as tsLibraryGenerator } from '@nx/js';
+import { libraryGenerator } from '@nx/angular/generators';
 import { tsquery } from '@phenomnomnominal/tsquery';
 
 interface NormalizedSchema extends ToolingWidgetScaffolderGeneratorSchema {

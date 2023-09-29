@@ -12,7 +12,7 @@ Run `nx test tooling-widget-scaffolder` to execute the unit tests via [Jest](htt
 
 ## How to setup this
 
-- npm install @nrwl/nx-plugin -D
+- npm install @nx/plugin -D
 
 npx nx g @test-widgets/widget-scaffolder:tooling-widget-scaffolder --dry-run
 
